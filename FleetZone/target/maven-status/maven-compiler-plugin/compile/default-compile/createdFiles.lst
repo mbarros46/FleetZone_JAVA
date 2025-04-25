@@ -1,0 +1,7 @@
+com\fiap\fleetzone\repository\MotoRepository.class
+com\fiap\fleetzone\FleetZoneApplication.class
+com\fiap\fleetzone\model\Moto.class
+com\fiap\fleetzone\controller\MotoController.class
+com\fiap\fleetzone\model\Patio.class
+com\fiap\fleetzone\dto\MotoDTO.class
+com\fiap\fleetzone\repository\PatioRepository.class
