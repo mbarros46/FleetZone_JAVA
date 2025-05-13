@@ -1,7 +1,6 @@
 
 package com.fiap.fleetzone.controller;
 
-import com.fiap.fleetzone.dto.MotoDTO;
 import com.fiap.fleetzone.model.Patio;
 import com.fiap.fleetzone.repository.PatioRepository;
 import jakarta.validation.Valid;

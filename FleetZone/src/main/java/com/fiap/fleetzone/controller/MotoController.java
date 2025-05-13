@@ -1,7 +1,8 @@
+
 package com.fiap.fleetzone.controller;
 
-import com.fiap.fleetzone.model.Moto;
 import com.fiap.fleetzone.dto.MotoDTO;
+import com.fiap.fleetzone.model.Moto;
 import com.fiap.fleetzone.repository.MotoRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,33 +23,41 @@ public class MotoController {
     private MotoRepository motoRepository;
 
     @GetMapping
-    public ResponseEntity<?> listar() {
-        return ResponseEntity.ok(motoRepository.findAll());
-    }
-
-    @GetMapping("/paginado")
     @Cacheable("motos")
-    public Page<MotoDTO> listarPaginado(Pageable pageable) {
+    public Page<MotoDTO> listar(Pageable pageable) {
         return motoRepository.findAll(pageable).map(MotoDTO::new);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Moto> buscar(@PathVariable Long id) {
+    public ResponseEntity<MotoDTO> buscar(@PathVariable Long id) {
         Optional<Moto> moto = motoRepository.findById(id);
-        return moto.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        return moto.map(value -> ResponseEntity.ok(new MotoDTO(value)))
+                   .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ResponseEntity<Moto> cadastrar(@RequestBody @Valid Moto moto) {
+    public ResponseEntity<MotoDTO> cadastrar(@RequestBody @Valid MotoDTO motoDTO) {
+        Moto moto = new Moto();
+        moto.setModelo(motoDTO.getModelo());
+        moto.setPlaca(motoDTO.getPlaca());
+        moto.setStatus(motoDTO.getStatus());
+
         Moto salvo = motoRepository.save(moto);
-        return ResponseEntity.created(URI.create("/motos/" + salvo.getId())).body(salvo);
+        return ResponseEntity.created(URI.create("/motos/" + salvo.getId())).body(new MotoDTO(salvo));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Moto> atualizar(@PathVariable Long id, @RequestBody @Valid Moto moto) {
-        if (!motoRepository.existsById(id)) return ResponseEntity.notFound().build();
-        moto.setId(id);
-        return ResponseEntity.ok(motoRepository.save(moto));
+    public ResponseEntity<MotoDTO> atualizar(@PathVariable Long id, @RequestBody @Valid MotoDTO motoDTO) {
+        Optional<Moto> existente = motoRepository.findById(id);
+        if (existente.isEmpty()) return ResponseEntity.notFound().build();
+
+        Moto moto = existente.get();
+        moto.setModelo(motoDTO.getModelo());
+        moto.setPlaca(motoDTO.getPlaca());
+        moto.setStatus(motoDTO.getStatus());
+
+        Moto atualizado = motoRepository.save(moto);
+        return ResponseEntity.ok(new MotoDTO(atualizado));
     }
 
     @DeleteMapping("/{id}")
