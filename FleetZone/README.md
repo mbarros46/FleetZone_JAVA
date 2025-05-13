@@ -108,5 +108,6 @@ Ou no VS Code com Spring Boot Extensions.
 
 ## 👨‍💻 Desenvolvido por
 
-- Pedro Valentim Merisi (RMxxxxx)
+- Miguel Barros Ramos (RM556652)
+- Pedro Valentim Merisi (RM556826)
 - Sprint 1 - Java Advanced
