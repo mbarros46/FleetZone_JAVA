@@ -2,33 +2,92 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Lista de Motos</title>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f6f8;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 900px;
+            margin: 30px auto;
+            background: #fff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border-radius: 8px;
+            padding: 32px;
+        }
+        h2 {
+            color: #2c3e50;
+            margin-bottom: 24px;
+        }
+        .btn-novo {
+            display: inline-block;
+            background: #3498db;
+            color: #fff;
+            padding: 8px 18px;
+            border-radius: 4px;
+            text-decoration: none;
+            margin-bottom: 18px;
+            transition: background 0.2s;
+        }
+        .btn-novo:hover {
+            background: #217dbb;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 24px;
+        }
+        th, td {
+            padding: 12px 8px;
+            text-align: left;
+        }
+        th {
+            background: #3498db;
+            color: #fff;
+        }
+        tr:nth-child(even) {
+            background: #f2f2f2;
+        }
+        .acoes a {
+            color: #3498db;
+            text-decoration: none;
+            margin-right: 10px;
+        }
+        .acoes a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
     <div th:replace="~{fragments/header :: header}"></div>
     <div th:replace="~{fragments/menu :: menu}"></div>
-    <h2>Lista de Motos</h2>
-    <a th:href="@{/motos/novo}">Nova Moto</a>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Modelo</th>
-                <th>Placa</th>
-                <th>Ações</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="moto : ${motos}">
-                <td th:text="${moto.id}"></td>
-                <td th:text="${moto.modelo}"></td>
-                <td th:text="${moto.placa}"></td>
-                <td>
-                    <a th:href="@{'/motos/editar/' + ${moto.id}}">Editar</a> |
-                    <a th:href="@{'/motos/excluir/' + ${moto.id}}">Excluir</a>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="container">
+        <h2>Lista de Motos</h2>
+        <a class="btn-novo" th:href="@{/motos/novo}">Nova Moto</a>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Modelo</th>
+                    <th>Placa</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="moto : ${motos}">
+                    <td th:text="${moto.id}"></td>
+                    <td th:text="${moto.modelo}"></td>
+                    <td th:text="${moto.placa}"></td>
+                    <td class="acoes">
+                        <a th:href="@{'/motos/editar/' + ${moto.id}}">Editar</a>
+                        <a th:href="@{'/motos/excluir/' + ${moto.id}}">Excluir</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
     <div th:replace="~{fragments/footer :: footer}"></div>
 </body>
 </html>
