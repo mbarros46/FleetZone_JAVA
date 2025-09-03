@@ -2,6 +2,7 @@ package com.fiap.fleetzone.controller;
 
 import com.fiap.fleetzone.model.Patio;
 import com.fiap.fleetzone.repository.PatioRepository;
+import com.fiap.fleetzone.dto.PatioRelatorioDTO;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
@@ -18,6 +19,14 @@ public class PatioController {
 
     @Autowired
     private PatioRepository patioRepository;
+
+    @GetMapping("/relatorio")
+    public List<PatioRelatorioDTO> relatorioMotosPorPatio() {
+        List<Patio> patios = patioRepository.findAll();
+        return patios.stream()
+                .map(p -> new PatioRelatorioDTO(p.getId(), p.getNome(), p.getMotos() != null ? p.getMotos().size() : 0))
+                .toList();
+    }
 
     @GetMapping
     @Cacheable("patios")
