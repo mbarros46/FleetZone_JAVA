@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${titulo}">Cadastro de Moto</title>
+</head>
+<body>
+    <div th:replace="fragments/header :: header"></div>
+    <div th:replace="fragments/menu :: menu"></div>
+    <h2 th:text="${titulo}">Cadastro de Moto</h2>
+    <form th:action="${action}" th:object="${moto}" method="post">
+        <label>Modelo:</label>
+        <input type="text" th:field="*{modelo}" required /> <br>
+        <label>Placa:</label>
+        <input type="text" th:field="*{placa}" required /> <br>
+        <button type="submit">Salvar</button>
+    </form>
+    <div th:replace="fragments/footer :: footer"></div>
+</body>
+</html>
