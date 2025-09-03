@@ -2,33 +2,92 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Lista de Pátios</title>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f6f8;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 900px;
+            margin: 30px auto;
+            background: #fff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border-radius: 8px;
+            padding: 32px;
+        }
+        h2 {
+            color: #2c3e50;
+            margin-bottom: 24px;
+        }
+        .btn-novo {
+            display: inline-block;
+            background: #27ae60;
+            color: #fff;
+            padding: 8px 18px;
+            border-radius: 4px;
+            text-decoration: none;
+            margin-bottom: 18px;
+            transition: background 0.2s;
+        }
+        .btn-novo:hover {
+            background: #219150;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 24px;
+        }
+        th, td {
+            padding: 12px 8px;
+            text-align: left;
+        }
+        th {
+            background: #27ae60;
+            color: #fff;
+        }
+        tr:nth-child(even) {
+            background: #f2f2f2;
+        }
+        .acoes a {
+            color: #27ae60;
+            text-decoration: none;
+            margin-right: 10px;
+        }
+        .acoes a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
-    <div th:replace="fragments/header :: header"></div>
-    <div th:replace="fragments/menu :: menu"></div>
-    <h2>Lista de Pátios</h2>
-    <a th:href="@{/patios/novo}">Novo Pátio</a>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Nome</th>
-                <th>Localização</th>
-                <th>Ações</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="patio : ${patios}">
-                <td th:text="${patio.id}"></td>
-                <td th:text="${patio.nome}"></td>
-                <td th:text="${patio.localizacao}"></td>
-                <td>
-                    <a th:href="@{'/patios/editar/' + ${patio.id}}">Editar</a> |
-                    <a th:href="@{'/patios/excluir/' + ${patio.id}}">Excluir</a>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <div th:replace="fragments/footer :: footer"></div>
+    <div th:replace="~{fragments/header :: header}"></div>
+    <div th:replace="~{fragments/menu :: menu}"></div>
+    <div class="container">
+        <h2>Lista de Pátios</h2>
+        <a class="btn-novo" th:href="@{/patios/novo}">Novo Pátio</a>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Localização</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="patio : ${patios}">
+                    <td th:text="${patio.id}"></td>
+                    <td th:text="${patio.nome}"></td>
+                    <td th:text="${patio.localizacao}"></td>
+                    <td class="acoes">
+                        <a th:href="@{'/patios/editar/' + ${patio.id}}">Editar</a>
+                        <a th:href="@{'/patios/excluir/' + ${patio.id}}">Excluir</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div th:replace="~{fragments/footer :: footer}"></div>
 </body>
 </html>

@@ -19,6 +19,46 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/motos")
 public class MotoController {
+    // Exibir formulário de nova moto
+    @GetMapping("/novo")
+    public String novaMotoForm(org.springframework.ui.Model model) {
+        model.addAttribute("moto", new com.fiap.fleetzone.model.Moto());
+        model.addAttribute("titulo", "Nova Moto");
+        model.addAttribute("action", "/motos/salvar");
+        return "moto-form";
+    }
+
+    // Salvar nova moto
+    @PostMapping("/salvar")
+    public String salvarMoto(@org.springframework.web.bind.annotation.ModelAttribute("moto") com.fiap.fleetzone.model.Moto moto) {
+        motoRepository.save(moto);
+        return "redirect:/motos";
+    }
+
+    // Exibir formulário de edição
+    @GetMapping("/editar/{id}")
+    public String editarMotoForm(@PathVariable Long id, org.springframework.ui.Model model) {
+        com.fiap.fleetzone.model.Moto moto = motoRepository.findById(id).orElseThrow();
+        model.addAttribute("moto", moto);
+        model.addAttribute("titulo", "Editar Moto");
+        model.addAttribute("action", "/motos/atualizar/" + id);
+        return "moto-form";
+    }
+
+    // Atualizar moto
+    @PostMapping("/atualizar/{id}")
+    public String atualizarMoto(@PathVariable Long id, @org.springframework.web.bind.annotation.ModelAttribute("moto") com.fiap.fleetzone.model.Moto moto) {
+        moto.setId(id);
+        motoRepository.save(moto);
+        return "redirect:/motos";
+    }
+
+    // Excluir moto
+    @GetMapping("/excluir/{id}")
+    public String excluirMoto(@PathVariable Long id) {
+        motoRepository.deleteById(id);
+        return "redirect:/motos";
+    }
 
     @Autowired
     private MotoRepository motoRepository;

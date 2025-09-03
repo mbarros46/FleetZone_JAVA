@@ -8,14 +8,55 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.stereotype.Controller;
 
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
-@RestController
+@Controller
 @RequestMapping("/patios")
 public class PatioController {
+    // Exibir formulário de novo pátio
+    @GetMapping("/novo")
+    public String novoPatioForm(org.springframework.ui.Model model) {
+        model.addAttribute("patio", new com.fiap.fleetzone.model.Patio());
+        model.addAttribute("titulo", "Novo Pátio");
+        model.addAttribute("action", "/patios/salvar");
+        return "patio-form";
+    }
+
+    // Salvar novo pátio
+    @PostMapping("/salvar")
+    public String salvarPatio(@org.springframework.web.bind.annotation.ModelAttribute("patio") com.fiap.fleetzone.model.Patio patio) {
+        patioRepository.save(patio);
+        return "redirect:/patios";
+    }
+
+    // Exibir formulário de edição
+    @GetMapping("/editar/{id}")
+    public String editarPatioForm(@PathVariable Long id, org.springframework.ui.Model model) {
+        com.fiap.fleetzone.model.Patio patio = patioRepository.findById(id).orElseThrow();
+        model.addAttribute("patio", patio);
+        model.addAttribute("titulo", "Editar Pátio");
+        model.addAttribute("action", "/patios/atualizar/" + id);
+        return "patio-form";
+    }
+
+    // Atualizar pátio
+    @PostMapping("/atualizar/{id}")
+    public String atualizarPatio(@PathVariable Long id, @org.springframework.web.bind.annotation.ModelAttribute("patio") com.fiap.fleetzone.model.Patio patio) {
+        patio.setId(id);
+        patioRepository.save(patio);
+        return "redirect:/patios";
+    }
+
+    // Excluir pátio
+    @GetMapping("/excluir/{id}")
+    public String excluirPatio(@PathVariable Long id) {
+        patioRepository.deleteById(id);
+        return "redirect:/patios";
+    }
 
     @Autowired
     private PatioRepository patioRepository;
@@ -29,9 +70,10 @@ public class PatioController {
     }
 
     @GetMapping
-    @Cacheable("patios")
-    public List<Patio> listar() {
-        return patioRepository.findAll();
+    public String listarPatios(org.springframework.ui.Model model) {
+        java.util.List<Patio> patios = patioRepository.findAll();
+        model.addAttribute("patios", patios);
+        return "patios";
     }
 
     @GetMapping("/{id}")
