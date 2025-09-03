@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${titulo}">Cadastro de Pátio</title>
+</head>
+<body>
+    <div th:replace="fragments/header :: header"></div>
+    <div th:replace="fragments/menu :: menu"></div>
+    <h2 th:text="${titulo}">Cadastro de Pátio</h2>
+    <form th:action="${action}" th:object="${patio}" method="post">
+        <label>Nome:</label>
+        <input type="text" th:field="*{nome}" required /> <br>
+        <label>Localização:</label>
+        <input type="text" th:field="*{localizacao}" required /> <br>
+        <button type="submit">Salvar</button>
+    </form>
+    <div th:replace="fragments/footer :: footer"></div>
+</body>
+</html>
