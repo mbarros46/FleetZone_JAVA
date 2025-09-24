@@ -56,6 +56,38 @@ public class MotoController {
         return "redirect:/motos";
     }
 
+    // Exibir detalhes da moto
+    @GetMapping("/{id}")
+    public String detalhesMoto(@PathVariable Long id, Model model) {
+        Moto moto = motoRepository.findById(id).orElseThrow();
+        model.addAttribute("moto", moto);
+        return "moto-detalhes";
+    }
+
+    // Listar motos disponíveis
+    @GetMapping("/disponveis")
+    public String motosDisponiveis(Model model) {
+        // Assumindo que há um campo status na Moto
+        // List<Moto> motos = motoRepository.findByStatus("DISPONIVEL");
+        java.util.List<Moto> motos = motoRepository.findAll(); // Por enquanto, todas as motos
+        model.addAttribute("motos", motos);
+        model.addAttribute("titulo", "Motos Disponíveis");
+        model.addAttribute("filtro", "disponivel");
+        return "motos";
+    }
+
+    // Listar motos em manutenção
+    @GetMapping("/manutencao")
+    public String motosManutencao(Model model) {
+        // Assumindo que há um campo status na Moto
+        // List<Moto> motos = motoRepository.findByStatus("MANUTENCAO");
+        java.util.List<Moto> motos = motoRepository.findAll(); // Por enquanto, todas as motos
+        model.addAttribute("motos", motos);
+        model.addAttribute("titulo", "Motos em Manutenção");
+        model.addAttribute("filtro", "manutencao");
+        return "motos";
+    }
+
     // Excluir moto
     @GetMapping("/excluir/{id}")
     public String excluirMoto(@PathVariable Long id) {

@@ -16,6 +16,10 @@ public class Patio {
     @Column(length = 200)
     private String localizacao;
 
+    @ManyToOne
+    @JoinColumn(name = "filial_id")
+    private Filial filial;
+
     @OneToMany(mappedBy = "patio", cascade = CascadeType.ALL)
     private List<Moto> motos;
 
@@ -49,5 +53,13 @@ public class Patio {
 
     public void setMotos(List<Moto> motos) {
         this.motos = motos;
+    }
+
+    public Filial getFilial() {
+        return filial;
+    }
+
+    public void setFilial(Filial filial) {
+        this.filial = filial;
     }
 }

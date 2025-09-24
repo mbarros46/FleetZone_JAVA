@@ -26,20 +26,21 @@ public class SecurityConfig {
             .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.disable())) // Para H2 Console
             .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(reg -> reg
-                // público p/ mobile
+                // API público para mobile
                 .requestMatchers("/api/auth/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/users/me").permitAll()
-                // docs
+                // Documentação
                 .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
-                // página inicial thymeleaf (se quiser manter pública)
-                .requestMatchers(HttpMethod.GET, "/").permitAll()
-                // páginas web de motos e pátios liberadas
-                .requestMatchers("/motos/**", "/patios/**").permitAll()
-                // console H2 (apenas dev)
+                // Todas as páginas Thymeleaf liberadas para demonstração
+                .requestMatchers("/", "/home", "/index").permitAll()
+                .requestMatchers("/motos/**", "/patios/**", "/filiais/**").permitAll()
+                .requestMatchers("/login", "/logout", "/error").permitAll()
+                // Console H2 (apenas dev)
                 .requestMatchers("/h2-console/**").permitAll()
-                // arquivos estáticos (CSS, JS, imagens)
+                // Arquivos estáticos (CSS, JS, imagens)
                 .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
-                // resto exige auth (se houver)
+                .requestMatchers("/favicon.ico").permitAll()
+                // Resto exige autenticação
                 .anyRequest().authenticated()
             );
         return http.build();

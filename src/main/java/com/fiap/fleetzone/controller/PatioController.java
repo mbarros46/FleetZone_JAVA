@@ -55,6 +55,14 @@ public class PatioController {
         return "redirect:/patios";
     }
 
+    // Exibir detalhes do pátio
+    @GetMapping("/{id}")
+    public String detalhesPatio(@PathVariable Long id, Model model) {
+        Patio patio = patioRepository.findById(id).orElseThrow();
+        model.addAttribute("patio", patio);
+        return "patio-detalhes";
+    }
+
     // Excluir pátio
     @GetMapping("/excluir/{id}")
     public String excluirPatio(@PathVariable Long id) {
