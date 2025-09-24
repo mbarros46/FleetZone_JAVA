@@ -39,7 +39,7 @@
 
 <!-- Fragmento: Validação de Formulários -->
 <div th:fragment="validationErrors">
-    <div th:if="${#fields.hasErrors('*')}" class="alert alert-danger" role="alert">
+    <div th:if="${#ctx.getVariable('org.springframework.validation.BindingResult.moto') != null and #fields.hasErrors('*')}" class="alert alert-danger" role="alert">
         <div class="d-flex align-items-start">
             <i class="fas fa-exclamation-triangle me-2 mt-1"></i>
             <div>
