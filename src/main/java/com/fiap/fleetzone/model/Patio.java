@@ -4,12 +4,16 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
+@Table(name = "patio")
 public class Patio {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(length = 100, nullable = false)
     private String nome;
+    
+    @Column(length = 200)
     private String localizacao;
 
     @OneToMany(mappedBy = "patio", cascade = CascadeType.ALL)

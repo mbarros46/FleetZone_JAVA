@@ -4,17 +4,21 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 
 @Entity
+@Table(name = "moto")
 public class Moto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotBlank
+    @Column(length = 100, nullable = false)
     private String modelo;
 
     @NotBlank
+    @Column(length = 10, nullable = false)
     private String placa;
 
+    @Column(length = 50)
     private String status;
 
     @ManyToOne

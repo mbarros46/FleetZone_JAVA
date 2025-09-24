@@ -23,6 +23,7 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+            .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.disable())) // Para H2 Console
             .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(reg -> reg
                 // público p/ mobile
@@ -32,6 +33,12 @@ public class SecurityConfig {
                 .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                 // página inicial thymeleaf (se quiser manter pública)
                 .requestMatchers(HttpMethod.GET, "/").permitAll()
+                // páginas web de motos e pátios liberadas
+                .requestMatchers("/motos/**", "/patios/**").permitAll()
+                // console H2 (apenas dev)
+                .requestMatchers("/h2-console/**").permitAll()
+                // arquivos estáticos (CSS, JS, imagens)
+                .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
                 // resto exige auth (se houver)
                 .anyRequest().authenticated()
             );
