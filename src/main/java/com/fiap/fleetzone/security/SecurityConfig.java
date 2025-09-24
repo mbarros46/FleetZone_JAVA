@@ -6,9 +6,9 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 
 import java.util.List;
@@ -22,10 +22,11 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .cors(cors -> cors.configurationSource(request -> {
                 CorsConfiguration cfg = new CorsConfiguration();
-                cfg.setAllowedOrigins(List.of(
-                    "http://localhost:19006", // Expo
-                    "http://localhost:3000",  // Web local, se usar
-                    "http://192.168.0.0/16"   // sua LAN; opcional
+                // Em dev, use padrões para liberar IPs do Expo/Emulador
+                cfg.setAllowedOriginPatterns(List.of(
+                    "http://localhost:*",
+                    "http://127.0.0.1:*",
+                    "http://192.168.*.*:*"
                 ));
                 cfg.setAllowedMethods(List.of("GET","POST","PUT","DELETE","OPTIONS"));
                 cfg.setAllowedHeaders(List.of("Authorization","Content-Type"));
@@ -38,11 +39,14 @@ public class SecurityConfig {
                 .requestMatchers("/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**").permitAll()
                 .anyRequest().authenticated()
             );
+
         return http.build();
     }
 
     @Bean
-    public BCryptPasswordEncoder passwordEncoder() { return new BCryptPasswordEncoder(); }
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {

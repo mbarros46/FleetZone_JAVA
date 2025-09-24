@@ -6,7 +6,9 @@ import java.time.Instant;
 @Entity
 @Table(name = "USERS", uniqueConstraints = @UniqueConstraint(columnNames = "EMAIL"))
 public class User {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable=false, length=120)
@@ -29,7 +31,7 @@ public class User {
 
     public void setId(Long id) { this.id = id; }
     public void setNome(String nome) { this.nome = nome; }
-    public void setEmail(String email) { this.email = email.toLowerCase(); }
+    public void setEmail(String email) { this.email = email == null ? null : email.toLowerCase(); }
     public void setPasswordHash(String passwordHash) { this.passwordHash = passwordHash; }
     public void setCreatedAt(Instant createdAt) { this.createdAt = createdAt; }
 }

@@ -1,11 +1,11 @@
 package com.fiap.fleetzone.controller;
 
-import com.fiap.fleetzone.dto.AuthDTOs.*;
+import com.fiap.fleetzone.dto.AuthDTOs.AuthLoginRequest;
+import com.fiap.fleetzone.dto.AuthDTOs.AuthRegisterRequest;
+import com.fiap.fleetzone.dto.AuthDTOs.AuthResponse;
 import com.fiap.fleetzone.model.User;
 import com.fiap.fleetzone.repository.UserRepository;
 import com.fiap.fleetzone.security.TokenService;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -54,5 +54,5 @@ public class AuthController {
                 .orElseGet(() -> ResponseEntity.status(401).body("Credenciais inválidas"));
     }
 
-    private static boolean isBlank(String s){ return s == null || s.trim().isEmpty(); }
+    private static boolean isBlank(String s) { return s == null || s.trim().isEmpty(); }
 }

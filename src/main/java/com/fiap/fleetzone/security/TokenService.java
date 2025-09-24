@@ -18,7 +18,7 @@ public class TokenService {
 
     public TokenService(
             @Value("${jwt.secret}") String secret,
-            @Value("${jwt.expiration:86400000}") long expirationMillis // 1 dia
+            @Value("${jwt.expiration:86400000}") long expirationMillis
     ) {
         this.key = Keys.hmacShaKeyFor(secret.getBytes());
         this.expirationMillis = expirationMillis;
@@ -37,6 +37,10 @@ public class TokenService {
     }
 
     public String getSubject(String token) {
-        return Jwts.parser().verifyWith(key).build().parseSignedClaims(token).getPayload().getSubject();
+        return Jwts.parser().verifyWith(key)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload()
+                .getSubject();
     }
 }

@@ -27,8 +27,11 @@ public class AuthDTOs {
         public Long id;
         public String nome;
         public String email;
+
         public Usuario(Long id, String nome, String email) {
-            this.id = id; this.nome = nome; this.email = email;
+            this.id = id;
+            this.nome = nome;
+            this.email = email;
         }
     }
 }
