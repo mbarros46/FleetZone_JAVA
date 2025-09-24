@@ -29,18 +29,23 @@ public class AuthController {
         if (body == null || isBlank(body.nome) || isBlank(body.email) || isBlank(body.senha)) {
             return ResponseEntity.badRequest().body("Campos obrigatórios: nome, email, senha");
         }
-        String email = body.email.toLowerCase();
+        String email = body.email.toLowerCase().trim();
+
         if (users.existsByEmail(email)) {
-            return ResponseEntity.status(409).body("E-mail já está em uso");
+            return ResponseEntity.status(409).body("E-mail já cadastrado");
         }
+
         User u = new User();
-        u.setNome(body.nome);
+        u.setNome(body.nome.trim());
         u.setEmail(email);
         u.setPasswordHash(encoder.encode(body.senha));
+
         users.save(u);
 
-        String token = tokens.generate(u);
-        return ResponseEntity.ok(new AuthResponse(token, u.getId(), u.getNome(), u.getEmail()));
+        String jwt = tokens.generate(u);
+        return ResponseEntity.status(201).body(
+                new AuthResponse(jwt, "Bearer", tokens.getExpirationMillis(), u.getId(), u.getNome(), u.getEmail())
+        );
     }
 
     @PostMapping("/login")
@@ -48,9 +53,12 @@ public class AuthController {
         if (body == null || isBlank(body.email) || isBlank(body.senha)) {
             return ResponseEntity.badRequest().body("Campos obrigatórios: email, senha");
         }
-        return users.findByEmail(body.email.toLowerCase())
+        return users.findByEmail(body.email.toLowerCase().trim())
                 .filter(u -> encoder.matches(body.senha, u.getPasswordHash()))
-                .<ResponseEntity<?>>map(u -> ResponseEntity.ok(new AuthResponse(tokens.generate(u), u.getId(), u.getNome(), u.getEmail())))
+                .<ResponseEntity<?>>map(u -> ResponseEntity.ok(
+                        new AuthResponse(tokens.generate(u), "Bearer", tokens.getExpirationMillis(),
+                                u.getId(), u.getNome(), u.getEmail())
+                ))
                 .orElseGet(() -> ResponseEntity.status(401).body("Credenciais inválidas"));
     }
 

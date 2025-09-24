@@ -10,6 +10,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.cors.CorsConfigurationSource;
 
 import java.util.List;
 
@@ -20,26 +22,19 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .csrf(csrf -> csrf.disable())
-            .cors(cors -> cors.configurationSource(request -> {
-                CorsConfiguration cfg = new CorsConfiguration();
-                // Em dev, use padrões para liberar IPs do Expo/Emulador
-                cfg.setAllowedOriginPatterns(List.of(
-                    "http://localhost:*",
-                    "http://127.0.0.1:*",
-                    "http://192.168.*.*:*"
-                ));
-                cfg.setAllowedMethods(List.of("GET","POST","PUT","DELETE","OPTIONS"));
-                cfg.setAllowedHeaders(List.of("Authorization","Content-Type"));
-                cfg.setAllowCredentials(true);
-                return cfg;
-            }))
+            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers(HttpMethod.POST, "/api/auth/register", "/api/auth/login").permitAll()
-                .requestMatchers("/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**").permitAll()
+            .authorizeHttpRequests(reg -> reg
+                // público p/ mobile
+                .requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/users/me").permitAll()
+                // docs
+                .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+                // página inicial thymeleaf (se quiser manter pública)
+                .requestMatchers(HttpMethod.GET, "/").permitAll()
+                // resto exige auth (se houver)
                 .anyRequest().authenticated()
             );
-
         return http.build();
     }
 
@@ -51,5 +46,16 @@ public class SecurityConfig {
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
+    }
+
+    private CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration cfg = new CorsConfiguration();
+        cfg.setAllowedOrigins(List.of("*")); // em prod, restrinja para o domínio do app
+        cfg.setAllowedMethods(List.of("GET","POST","PUT","DELETE","PATCH","OPTIONS"));
+        cfg.setAllowedHeaders(List.of("*"));
+        cfg.setExposedHeaders(List.of("Authorization"));
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", cfg);
+        return source;
     }
 }

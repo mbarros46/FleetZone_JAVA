@@ -15,11 +15,20 @@ public class AuthDTOs {
 
     public static class AuthResponse {
         public String token;
-        public Usuario usuario;
+        public String tokenType;
+        public Long expiresInMillis;
+        public Long userId;
+        public String nome;
+        public String email;
 
-        public AuthResponse(String token, Long id, String nome, String email) {
+        public AuthResponse(String token, String tokenType, Long expiresInMillis,
+                            Long userId, String nome, String email) {
             this.token = token;
-            this.usuario = new Usuario(id, nome, email);
+            this.tokenType = tokenType;
+            this.expiresInMillis = expiresInMillis;
+            this.userId = userId;
+            this.nome = nome;
+            this.email = email;
         }
     }
 
