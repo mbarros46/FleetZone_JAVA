@@ -1,93 +1,531 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Lista de Motos</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestão de Motos - FleetZone</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         body {
-            font-family: Arial, Helvetica, sans-serif;
-            background: #f4f6f8;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .main-container {
+            margin-top: 20px;
+            margin-bottom: 40px;
+        }
+        .page-header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 32px rgba(44, 62, 80, 0.2);
+        }
+        .page-title {
+            color: white;
+            font-weight: 700;
             margin: 0;
-            padding: 0;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
         }
-        .container {
-            max-width: 900px;
-            margin: 30px auto;
-            background: #fff;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-            border-radius: 8px;
-            padding: 32px;
-        }
-        h2 {
-            color: #2c3e50;
-            margin-bottom: 24px;
-        }
-        .btn-novo {
-            display: inline-block;
-            background: #3498db;
-            color: #fff;
-            padding: 8px 18px;
-            border-radius: 4px;
-            text-decoration: none;
-            margin-bottom: 18px;
-            transition: background 0.2s;
-        }
-        .btn-novo:hover {
-            background: #217dbb;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 24px;
-        }
-        th, td {
-            padding: 12px 8px;
-            text-align: left;
-        }
-        th {
-            background: #3498db;
-            color: #fff;
-        }
-        tr:nth-child(even) {
-            background: #f2f2f2;
-        }
-        .acoes a {
+        .page-title i {
             color: #3498db;
-            text-decoration: none;
-            margin-right: 10px;
+            font-size: 2.5rem;
         }
-        .acoes a:hover {
-            text-decoration: underline;
+        .content-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .btn-new {
+            position: relative;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            border: none;
+            padding: 14px 28px;
+            border-radius: 12px;
+            color: white;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 6px 20px rgba(106, 17, 203, 0.4);
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            overflow: hidden;
+        }
+        .btn-new::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.6s ease;
+        }
+        .btn-new:hover::before {
+            left: 100%;
+        }
+        .btn-new:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 10px 30px rgba(106, 17, 203, 0.6);
+            color: white;
+            background: linear-gradient(135deg, #2575fc 0%, #6a11cb 100%);
+        }
+        .btn-new:active {
+            transform: translateY(-1px) scale(1.02);
+        }
+        .btn-new i {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+        .btn-new:hover i {
+            transform: rotate(180deg) scale(1.2);
+        }
+        .table-container {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        .table {
+            margin: 0;
+            background: white;
+        }
+        .table thead th {
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            padding: 1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+        }
+        .table tbody td {
+            padding: 1rem;
+            vertical-align: middle;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+        .table tbody tr {
+            transition: all 0.3s ease;
+        }
+        .table tbody tr:hover {
+            background-color: rgba(52, 152, 219, 0.05);
+            transform: scale(1.01);
+        }
+        .badge-status {
+            padding: 10px 16px;
+            border-radius: 25px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .status-disponivel {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            color: white;
+            box-shadow: 0 2px 10px rgba(39, 174, 96, 0.3);
+        }
+        .status-disponivel::before {
+            content: '●';
+            font-size: 1rem;
+            animation: pulse 2s infinite;
+        }
+        .status-manutencao {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            color: white;
+            box-shadow: 0 2px 10px rgba(243, 156, 18, 0.3);
+        }
+        .status-manutencao::before {
+            content: '⚠';
+            font-size: 1rem;
+        }
+        .status-alugada {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            box-shadow: 0 2px 10px rgba(231, 76, 60, 0.3);
+        }
+        .status-alugada::before {
+            content: '🚫';
+            font-size: 0.9rem;
+        }
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        .patio-info {
+            display: flex;
+            align-items: center;
+            padding: 8px 12px;
+            background: linear-gradient(135deg, rgba(39, 174, 96, 0.1), rgba(39, 174, 96, 0.05));
+            border-left: 3px solid #27ae60;
+            border-radius: 8px;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+        .patio-info i {
+            color: #27ae60;
+        }
+        .no-patio-info {
+            display: flex;
+            align-items: center;
+            padding: 8px 12px;
+            background: linear-gradient(135deg, rgba(243, 156, 18, 0.1), rgba(243, 156, 18, 0.05));
+            border-left: 3px solid #f39c12;
+            border-radius: 8px;
+            color: #6c757d;
+            font-style: italic;
+        }
+        .no-patio-info i {
+            color: #f39c12;
+        }
+        .placa-badge {
+            background: linear-gradient(135deg, #6c757d, #495057);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 12px;
+            font-family: 'Courier New', monospace;
+            font-weight: 700;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            border: 2px solid rgba(108, 117, 125, 0.3);
+            display: inline-block;
+            box-shadow: 0 2px 8px rgba(108, 117, 125, 0.2);
+        }
+        .action-buttons {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .btn-action {
+            position: relative;
+            padding: 10px 18px;
+            border-radius: 12px;
+            border: none;
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            min-width: 90px;
+            justify-content: center;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            overflow: hidden;
+        }
+        .btn-action::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.6s ease;
+        }
+        .btn-action:hover::before {
+            left: 100%;
+        }
+        .btn-view {
+            background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(116, 185, 255, 0.4);
+            border: 2px solid rgba(116, 185, 255, 0.2);
+        }
+        .btn-view:hover {
+            background: linear-gradient(135deg, #0984e3 0%, #74b9ff 100%);
+            color: white;
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(116, 185, 255, 0.6);
+            border: 2px solid rgba(116, 185, 255, 0.4);
+        }
+        .btn-view:active {
+            transform: translateY(-1px) scale(1.02);
+        }
+        .btn-edit {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            border: 2px solid rgba(102, 126, 234, 0.2);
+        }
+        .btn-edit:hover {
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+            color: white;
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+            border: 2px solid rgba(102, 126, 234, 0.4);
+        }
+        .btn-edit:active {
+            transform: translateY(-1px) scale(1.02);
+        }
+        .btn-delete {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+            border: 2px solid rgba(255, 107, 107, 0.2);
+        }
+        .btn-delete:hover {
+            background: linear-gradient(135deg, #ee5a52 0%, #dc3545 100%);
+            color: white;
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.6);
+            border: 2px solid rgba(255, 107, 107, 0.4);
+        }
+        .btn-delete:active {
+            transform: translateY(-1px) scale(1.02);
+        }
+        .btn-action i {
+            font-size: 1rem;
+            transition: transform 0.3s ease;
+        }
+        .btn-action:hover i {
+            transform: scale(1.2);
+        }
+        @media (max-width: 768px) {
+            .action-buttons {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            .btn-action {
+                width: 100%;
+                font-size: 0.8rem;
+                padding: 8px 14px;
+                min-width: unset;
+            }
+            .table-container {
+                overflow-x: auto;
+            }
+            .btn-new {
+                padding: 12px 20px;
+                font-size: 0.9rem;
+            }
+        }
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: #6c757d;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        .empty-state i {
+            font-size: 5rem;
+            color: #dee2e6;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .empty-state h4 {
+            color: #2c3e50;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        .empty-state p {
+            color: #6c757d;
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+        .breadcrumb {
+            background: rgba(52, 73, 94, 0.1);
+            padding: 0.75rem 1rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+        }
+        .breadcrumb a {
+            color: #2c3e50;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .breadcrumb a:hover {
+            color: #3498db;
+        }
+        .breadcrumb-item.active {
+            color: #6c757d;
+        }
+        .stats-card {
+            background: linear-gradient(135deg, rgba(52, 152, 219, 0.1), rgba(52, 152, 219, 0.05));
+            border: 1px solid rgba(52, 152, 219, 0.2);
+            border-radius: 12px;
+            padding: 1.5rem;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        .stats-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #3498db;
+            margin-bottom: 0.5rem;
+        }
+        .stats-label {
+            font-size: 0.9rem;
+            color: #6c757d;
+            font-weight: 500;
         }
     </style>
 </head>
 <body>
-    <div th:replace="~{fragments/header :: header}"></div>
-    <div th:replace="~{fragments/menu :: menu}"></div>
-    <div class="container">
-        <h2>Lista de Motos</h2>
-        <a class="btn-novo" th:href="@{/motos/novo}">Nova Moto</a>
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Modelo</th>
-                    <th>Placa</th>
-                    <th>Ações</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="moto : ${motos}">
-                    <td th:text="${moto.id}"></td>
-                    <td th:text="${moto.modelo}"></td>
-                    <td th:text="${moto.placa}"></td>
-                    <td class="acoes">
-                        <a th:href="@{'/motos/editar/' + ${moto.id}}">Editar</a>
-                        <a th:href="@{'/motos/excluir/' + ${moto.id}}">Excluir</a>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+    <!-- Header -->
+    <nav th:replace="~{fragments/header}"></nav>
+
+    <div class="container-fluid main-container">
+        <!-- Breadcrumb -->
+        <div class="container">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i> Início</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Motos</li>
+                </ol>
+            </nav>
+        </div>
+
+        <div class="container">
+            <!-- Page Header -->
+            <div class="page-header">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <h1 class="page-title">
+                            <i class="fas fa-motorcycle"></i>
+                            Gestão de Motocicletas
+                        </h1>
+                        <p class="text-muted mb-0">Gerencie todas as motocicletas da frota FleetZone</p>
+                    </div>
+                    <div class="col-md-4 text-end">
+                        <div class="stats-card">
+                            <div class="stats-number" th:text="${#lists.size(motos)}">0</div>
+                            <div class="stats-label">Total de Motocicletas</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Card -->
+            <div class="content-card">
+                <!-- Action Bar -->
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <a href="/motos/novo" class="btn-new">
+                            <i class="fas fa-plus"></i>
+                            Nova Motocicleta
+                        </a>
+                    </div>
+                    <div class="text-muted">
+                        <i class="fas fa-list"></i>
+                        Lista completa das motocicletas
+                    </div>
+                </div>
+
+                <!-- Table -->
+                <div class="table-container" th:if="${not #lists.isEmpty(motos)}">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th><i class="fas fa-hashtag"></i> ID</th>
+                                <th><i class="fas fa-motorcycle"></i> Modelo</th>
+                                <th><i class="fas fa-id-card"></i> Placa</th>
+                                <th><i class="fas fa-info-circle"></i> Status</th>
+                                <th><i class="fas fa-warehouse"></i> Pátio</th>
+                                <th class="text-center"><i class="fas fa-cogs"></i> Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="moto : ${motos}">
+                                <td>
+                                    <strong th:text="${moto.id}">1</strong>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-motorcycle text-primary me-2"></i>
+                                        <span th:text="${moto.modelo}">Honda CG 160</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="placa-badge" th:text="${moto.placa}">ABC-1234</span>
+                                </td>
+                                <td>
+                                    <span class="badge-status" 
+                                          th:classappend="${moto.status == 'DISPONIVEL'} ? 'status-disponivel' : 
+                                                         (${moto.status == 'MANUTENCAO'} ? 'status-manutencao' : 'status-alugada')"
+                                          th:text="${moto.status}">
+                                        Disponível
+                                    </span>
+                                </td>
+                                <td>
+                                    <div th:if="${moto.patio != null}" class="patio-info">
+                                        <i class="fas fa-map-marker-alt me-2"></i>
+                                        <span th:text="${moto.patio.nome}">Pátio Central</span>
+                                    </div>
+                                    <div th:if="${moto.patio == null}" class="no-patio-info">
+                                        <i class="fas fa-exclamation-triangle me-2"></i>
+                                        <span>Sem pátio definido</span>
+                                    </div>
+                                </td>
+                                <td class="text-center">
+                                    <div class="action-buttons">
+                                        <a th:href="@{/motos/{id}(id=${moto.id})}" 
+                                           class="btn-action btn-view" 
+                                           title="Visualizar detalhes">
+                                            <i class="fas fa-eye"></i>
+                                            Ver
+                                        </a>
+                                        <a th:href="@{/motos/editar/{id}(id=${moto.id})}" 
+                                           class="btn-action btn-edit"
+                                           title="Editar moto">
+                                            <i class="fas fa-edit"></i>
+                                            Editar
+                                        </a>
+                                        <a th:href="@{/motos/excluir/{id}(id=${moto.id})}" 
+                                           class="btn-action btn-delete"
+                                           title="Excluir moto"
+                                           onclick="return confirm('Tem certeza que deseja excluir esta moto?')">
+                                            <i class="fas fa-trash"></i>
+                                            Excluir
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Empty State -->
+                <div class="empty-state" th:if="${#lists.isEmpty(motos)}">
+                    <i class="fas fa-motorcycle"></i>
+                    <h4>Nenhuma motocicleta cadastrada</h4>
+                    <p>Comece adicionando a primeira motocicleta da sua frota</p>
+                    <a href="/motos/novo" class="btn-new mt-3">
+                        <i class="fas fa-plus"></i>
+                        Cadastrar Primeira Moto
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
-    <div th:replace="~{fragments/footer :: footer}"></div>
+
+    <!-- Footer -->
+    <footer th:replace="~{fragments/footer}"></footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

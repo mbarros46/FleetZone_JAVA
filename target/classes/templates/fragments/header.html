@@ -1,11 +1,72 @@
 <!-- Fragmento: Cabeçalho -->
 <div th:fragment="header">
-    <header>
-        <h1>FleetZone</h1>
-        <nav>
-            <a th:href="@{/motos}">Motos</a> |
-            <a th:href="@{/patios}">Pátios</a>
-        </nav>
-        <hr>
-    </header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+        <div class="container">
+            <!-- Logo/Brand -->
+            <a class="navbar-brand d-flex align-items-center" th:href="@{/}">
+                <i class="fas fa-motorcycle me-2 text-primary" style="font-size: 1.5rem;"></i>
+                <span class="fw-bold text-dark" style="font-size: 1.3rem;">FleetZone</span>
+            </a>
+            
+            <!-- Mobile toggle -->
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <!-- Navigation -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link fw-semibold text-dark me-3 d-flex align-items-center" th:href="@{/motos}">
+                            <i class="fas fa-motorcycle me-2 text-primary"></i>
+                            Motos
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fw-semibold text-dark me-3 d-flex align-items-center" th:href="@{/patios}">
+                            <i class="fas fa-warehouse me-2 text-success"></i>
+                            Pátios
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fw-semibold text-dark d-flex align-items-center" th:href="@{/swagger-ui.html}" target="_blank">
+                            <i class="fas fa-code me-2 text-warning"></i>
+                            API
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 </div>
+
+<style>
+    .navbar {
+        border-bottom: 1px solid #e9ecef;
+    }
+    .navbar-brand {
+        transition: transform 0.3s ease;
+    }
+    .navbar-brand:hover {
+        transform: scale(1.05);
+    }
+    .nav-link {
+        border-radius: 8px;
+        padding: 0.5rem 1rem !important;
+        margin: 0 0.2rem;
+        transition: all 0.3s ease;
+    }
+    .nav-link:hover {
+        background-color: rgba(52, 58, 64, 0.1);
+        transform: translateY(-1px);
+    }
+    .nav-link i {
+        font-size: 1rem;
+    }
+    @media (max-width: 991px) {
+        .nav-link {
+            margin: 0.2rem 0;
+        }
+    }
+</style>
