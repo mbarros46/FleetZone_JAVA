@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:text="${titulo}">Cadastro de Moto - FleetZone</title>
+    <title th:text="${titulo ?: 'Formulário de Moto'} + ' - FleetZone'">Formulário de Moto - FleetZone</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -16,32 +16,36 @@
             margin-top: 20px;
             margin-bottom: 40px;
         }
-        .form-container {
+        .page-header {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 32px rgba(231, 76, 60, 0.2);
+        }
+        .page-title {
+            color: white;
+            font-weight: 700;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .page-title i {
+            color: #fff;
+            font-size: 2.5rem;
+        }
+        .form-card {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
             border-radius: 15px;
             padding: 2.5rem;
             box-shadow: 0 8px 32px rgba(0,0,0,0.1);
             border: 1px solid rgba(255, 255, 255, 0.2);
-            max-width: 600px;
-            margin: 0 auto;
         }
-        .form-header {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-        .form-title {
-            color: #2c3e50;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 1rem;
-        }
-        .form-title i {
-            color: #3498db;
-            font-size: 2rem;
+        .form-group {
+            margin-bottom: 1.5rem;
         }
         .form-label {
             font-weight: 600;
@@ -51,206 +55,506 @@
             align-items: center;
             gap: 0.5rem;
         }
-        .form-control {
+        .form-control, .form-select {
             border-radius: 10px;
-            border: 2px solid rgba(52, 152, 219, 0.2);
-            padding: 12px 16px;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            background: rgba(255, 255, 255, 0.9);
-        }
-        .form-control:focus {
-            border-color: #3498db;
-            box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
-            background: white;
-        }
-        .form-select {
-            border-radius: 10px;
-            border: 2px solid rgba(52, 152, 219, 0.2);
-            padding: 12px 16px;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            background: rgba(255, 255, 255, 0.9);
-        }
-        .form-select:focus {
-            border-color: #3498db;
-            box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
-            background: white;
-        }
-        .btn-save {
-            background: linear-gradient(45deg, #28a745, #20c997);
-            border: none;
-            padding: 12px 30px;
-            border-radius: 10px;
-            color: white;
-            font-weight: 600;
-            font-size: 1.1rem;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
-            width: 100%;
-        }
-        .btn-save:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
-            color: white;
-        }
-        .btn-cancel {
-            background: linear-gradient(45deg, #6c757d, #5a6268);
-            border: none;
-            padding: 10px 25px;
-            border-radius: 10px;
-            color: white;
-            font-weight: 500;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        .btn-cancel:hover {
-            transform: translateY(-1px);
-            color: white;
-        }
-        .breadcrumb {
-            background: rgba(52, 152, 219, 0.1);
+            border: 2px solid #e9ecef;
             padding: 0.75rem 1rem;
-            border-radius: 10px;
-            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
         }
-        .breadcrumb a {
-            color: #2c3e50;
-            text-decoration: none;
-            font-weight: 500;
-        }
-        .breadcrumb a:hover {
-            color: #3498db;
-        }
-        .breadcrumb-item.active {
-            color: #6c757d;
+        .form-control:focus, .form-select:focus {
+            border-color: #e74c3c;
+            box-shadow: 0 0 0 0.2rem rgba(243, 156, 18, 0.25);
         }
         .input-group-text {
-            background: rgba(52, 152, 219, 0.1);
-            border: 2px solid rgba(52, 152, 219, 0.2);
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
             border-right: none;
-            color: #3498db;
-            font-weight: 600;
-        }
-        .form-floating label {
+            border-radius: 10px 0 0 10px;
             color: #6c757d;
+        }
+        .input-group .form-control {
+            border-left: none;
+            border-radius: 0 10px 10px 0;
+        }
+        .input-group:focus-within .input-group-text {
+            border-color: #e74c3c;
+            background: #fff8f0;
+            color: #e74c3c;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            border: none;
+            color: white;
+            font-weight: 600;
+            padding: 0.75rem 2rem;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
+            color: white;
+        }
+        .btn-secondary {
+            background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);
+            border: none;
+            color: white;
+            font-weight: 600;
+            padding: 0.75rem 2rem;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            color: white;
+        }
+        .section-title {
+            color: #2c3e50;
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #e74c3c;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .section-title i {
+            color: #e74c3c;
+            font-size: 1.4rem;
+        }
+        .required {
+            color: #e74c3c;
+        }
+        .help-text {
+            font-size: 0.875rem;
+            color: #6c757d;
+            margin-top: 0.25rem;
+        }
+        .is-invalid {
+            border-color: #e74c3c !important;
+        }
+        .invalid-feedback {
+            display: block;
+            color: #e74c3c;
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+        }
+        .form-check-input:checked {
+            background-color: #e74c3c;
+            border-color: #e74c3c;
+        }
+        .form-check-input:focus {
+            box-shadow: 0 0 0 0.2rem rgba(243, 156, 18, 0.25);
+        }
+        .form-check-label {
+            font-weight: 500;
+            color: #2c3e50;
+            margin-left: 0.5rem;
+        }
+        .breadcrumb {
+            background: transparent;
+            padding: 0;
+            margin-bottom: 1rem;
+        }
+        .breadcrumb-item a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+        }
+        .breadcrumb-item a:hover {
+            color: white;
+        }
+        .breadcrumb-item.active {
+            color: rgba(255, 255, 255, 0.9);
+        }
+        .card-body {
+            padding: 0;
+        }
+        .row.g-3 > * {
+            padding-left: 0.75rem;
+            padding-right: 0.75rem;
         }
     </style>
 </head>
 <body>
     <!-- Header -->
-    <nav th:replace="~{fragments/header}"></nav>
+    <div th:replace="~{fragments/header :: header}"></div>
 
     <div class="container-fluid main-container">
-        <!-- Breadcrumb -->
-        <div class="container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <!-- Breadcrumb -->
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i> Início</a></li>
-                    <li class="breadcrumb-item"><a href="/motos"><i class="fas fa-motorcycle"></i> Motos</a></li>
-                    <li class="breadcrumb-item active" aria-current="page" th:text="${titulo}">Nova Moto</li>
+                    <li class="breadcrumb-item">
+                        <a th:href="@{/}"><i class="fas fa-home me-1"></i>Início</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a th:href="@{/motos}"><i class="fas fa-motorcycle me-1"></i>Motos</a>
+                    </li>
+                    <li class="breadcrumb-item active" th:text="${titulo ?: 'Formulário'}">Formulário</li>
                 </ol>
             </nav>
+            
+            <h1 class="page-title">
+                <i class="fas fa-motorcycle"></i>
+                <span th:text="${titulo ?: 'Formulário de Moto'}">Formulário de Moto</span>
+            </h1>
+            <p class="mb-0 mt-2 opacity-75" th:text="${moto.id != null ? 'Edite as informações da moto' : 'Preencha os dados para cadastrar uma nova moto'}">
+                Preencha os dados da moto
+            </p>
         </div>
 
-        <div class="container">
-            <!-- Form Container -->
-            <div class="form-container">
-                <!-- Form Header -->
-                <div class="form-header">
-                    <h1 class="form-title">
-                        <i class="fas fa-motorcycle"></i>
-                        <span th:text="${titulo}">Nova Motocicleta</span>
-                    </h1>
-                    <p class="text-muted">Preencha os dados da motocicleta abaixo</p>
+        <!-- Messages -->
+        <div th:replace="~{fragments/messages :: messages}"></div>
+        
+        <!-- Validation Errors -->
+        <div th:replace="~{fragments/messages :: validationErrors}"></div>
+
+        <!-- Form Card -->
+        <div class="form-card">
+            <form th:action="${action ?: '/motos/salvar'}" th:object="${moto}" method="post" novalidate>
+                <input type="hidden" th:field="*{id}" th:if="${moto.id != null}">
+                
+                <!-- Dados Básicos -->
+                <div class="section-title">
+                    <i class="fas fa-info-circle"></i>
+                    Dados Básicos
                 </div>
-
-                <!-- Form -->
-                <form th:action="${action}" th:object="${moto}" method="post">
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="modelo" class="form-label">
-                                <i class="fas fa-motorcycle"></i>
-                                Modelo da Motocicleta
-                            </label>
-                            <input type="text" 
-                                   class="form-control" 
-                                   id="modelo"
-                                   th:field="*{modelo}" 
-                                   placeholder="Ex: Honda CG 160, Yamaha Fazer 250"
-                                   required>
-                        </div>
-
-                        <div class="col-md-6 mb-3">
+                
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="form-group">
                             <label for="placa" class="form-label">
                                 <i class="fas fa-id-card"></i>
-                                Placa do Veículo
+                                Placa <span class="required">*</span>
                             </label>
-                            <input type="text" 
-                                   class="form-control" 
-                                   id="placa"
-                                   th:field="*{placa}" 
-                                   placeholder="ABC-1234"
-                                   pattern="[A-Za-z]{3}-[0-9]{4}"
-                                   title="Formato: ABC-1234"
-                                   required>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="fas fa-id-card"></i>
+                                </span>
+                                <input type="text" 
+                                       id="placa" 
+                                       th:field="*{placa}"
+                                       class="form-control placa-input"
+                                       placeholder="Ex: ABC-1234"
+                                       maxlength="8"
+                                       required>
+                            </div>
+                            <div class="help-text">Placa da moto (formato ABC-1234 ou ABC1D23)</div>
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('placa')}" th:errors="*{placa}"></div>
                         </div>
                     </div>
-
-                    <div class="row">
-                        <div class="col-md-12 mb-4">
-                            <label for="status" class="form-label">
-                                <i class="fas fa-info-circle"></i>
-                                Status da Motocicleta
+                    
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="marca" class="form-label">
+                                <i class="fas fa-tag"></i>
+                                Marca <span class="required">*</span>
                             </label>
-                            <select class="form-select" id="status" th:field="*{status}" required>
-                                <option value="">Selecione o status...</option>
-                                <option value="DISPONIVEL">🟢 Disponível</option>
-                                <option value="MANUTENCAO">🟡 Em Manutenção</option>
-                                <option value="ALUGADA">🔴 Alugada</option>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="fas fa-tag"></i>
+                                </span>
+                                <input type="text" 
+                                       id="marca" 
+                                       th:field="*{marca}"
+                                       class="form-control"
+                                       placeholder="Ex: Honda, Yamaha, Suzuki"
+                                       maxlength="50"
+                                       required>
+                            </div>
+                            <div class="help-text">Marca da moto (máx. 50 caracteres)</div>
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('marca')}" th:errors="*{marca}"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="modelo" class="form-label">
+                                <i class="fas fa-motorcycle"></i>
+                                Modelo <span class="required">*</span>
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="fas fa-motorcycle"></i>
+                                </span>
+                                <input type="text" 
+                                       id="modelo" 
+                                       th:field="*{modelo}"
+                                       class="form-control"
+                                       placeholder="Ex: CG 160, CB 600F, MT-03"
+                                       maxlength="50"
+                                       required>
+                            </div>
+                            <div class="help-text">Modelo da moto (máx. 50 caracteres)</div>
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('modelo')}" th:errors="*{modelo}"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="ano" class="form-label">
+                                <i class="fas fa-calendar"></i>
+                                Ano <span class="required">*</span>
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="fas fa-calendar"></i>
+                                </span>
+                                <input type="number" 
+                                       id="ano" 
+                                       th:field="*{ano}"
+                                       class="form-control"
+                                       placeholder="Ex: 2024"
+                                       min="1900"
+                                       max="2030"
+                                       required>
+                            </div>
+                            <div class="help-text">Ano de fabricação da moto</div>
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('ano')}" th:errors="*{ano}"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Características -->
+                <div class="section-title mt-4">
+                    <i class="fas fa-cogs"></i>
+                    Características
+                </div>
+                
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="cor" class="form-label">
+                                <i class="fas fa-palette"></i>
+                                Cor <span class="required">*</span>
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="fas fa-palette"></i>
+                                </span>
+                                <input type="text" 
+                                       id="cor" 
+                                       th:field="*{cor}"
+                                       class="form-control"
+                                       placeholder="Ex: Vermelha, Azul, Preta"
+                                       maxlength="30"
+                                       required>
+                            </div>
+                            <div class="help-text">Cor da moto</div>
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('cor')}" th:errors="*{cor}"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="cilindrada" class="form-label">
+                                <i class="fas fa-tachometer-alt"></i>
+                                Cilindrada
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="fas fa-tachometer-alt"></i>
+                                </span>
+                                <input type="number" 
+                                       id="cilindrada" 
+                                       th:field="*{cilindrada}"
+                                       class="form-control"
+                                       placeholder="Ex: 160, 600, 1000"
+                                       min="50"
+                                       max="2000">
+                                <span class="input-group-text">cc</span>
+                            </div>
+                            <div class="help-text">Cilindrada da moto em cc</div>
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('cilindrada')}" th:errors="*{cilindrada}"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="patio" class="form-label">
+                                <i class="fas fa-warehouse"></i>
+                                Pátio <span class="required">*</span>
+                            </label>
+                            <select id="patio" th:field="*{patio}" class="form-select" required>
+                                <option value="">Selecione um pátio</option>
+                                <option th:each="patio : ${patios}" 
+                                        th:value="${patio.id}" 
+                                        th:text="${patio.nome}"
+                                        th:selected="${moto.patio != null and moto.patio.id == patio.id}">
+                                    Pátio
+                                </option>
                             </select>
+                            <div class="help-text">Pátio onde a moto está localizada</div>
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('patio')}" th:errors="*{patio}"></div>
                         </div>
                     </div>
+                </div>
 
-                    <!-- Action Buttons -->
-                    <div class="row mt-4">
-                        <div class="col-12">
-                            <button type="submit" class="btn-save">
-                                <i class="fas fa-save me-2"></i>
-                                Salvar Motocicleta
-                            </button>
+                <div class="row g-3">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="observacoes" class="form-label">
+                                <i class="fas fa-sticky-note"></i>
+                                Observações
+                            </label>
+                            <textarea id="observacoes" 
+                                      th:field="*{observacoes}"
+                                      class="form-control"
+                                      rows="3"
+                                      placeholder="Observações adicionais sobre a moto..."
+                                      maxlength="500"></textarea>
+                            <div class="help-text">Informações adicionais sobre a moto (opcional)</div>
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('observacoes')}" th:errors="*{observacoes}"></div>
                         </div>
                     </div>
+                </div>
 
-                    <div class="row mt-3">
-                        <div class="col-12 text-center">
-                            <a href="/motos" class="btn-cancel">
-                                <i class="fas fa-arrow-left"></i>
-                                Voltar para Lista
-                            </a>
+                <!-- Status -->
+                <div class="section-title mt-4">
+                    <i class="fas fa-info-circle"></i>
+                    Status
+                </div>
+                
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="status" class="form-label">
+                                <i class="fas fa-check-circle"></i>
+                                Status da Moto <span class="required">*</span>
+                            </label>
+                            <select id="status" th:field="*{status}" class="form-select" required>
+                                <option value="">Selecione o status</option>
+                                <option value="DISPONIVEL">Disponível</option>
+                                <option value="EM_USO">Em Uso</option>
+                                <option value="MANUTENCAO">Em Manutenção</option>
+                                <option value="INATIVA">Inativa</option>
+                            </select>
+                            <div class="help-text">Status atual da moto</div>
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('status')}" th:errors="*{status}"></div>
                         </div>
                     </div>
-                </form>
-            </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="form-check mt-4">
+                                <input class="form-check-input" type="checkbox" id="disponivel" th:field="*{disponivel}">
+                                <label class="form-check-label" for="disponivel">
+                                    <i class="fas fa-toggle-on text-success me-1"></i>
+                                    Moto Disponível
+                                </label>
+                            </div>
+                            <div class="help-text">Marque se a moto está disponível para uso</div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="observacoes" class="form-label">
+                                <i class="fas fa-sticky-note"></i>
+                                Observações
+                            </label>
+                            <textarea id="observacoes" 
+                                    th:field="*{observacoes}"
+                                    class="form-control"
+                                    rows="4"
+                                    placeholder="Informações adicionais sobre a moto..."
+                                    maxlength="500"></textarea>
+                            <div class="help-text">Informações adicionais (máx. 500 caracteres)</div>
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('observacoes')}" th:errors="*{observacoes}"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Buttons -->
+                <div class="d-flex justify-content-between mt-4 pt-3 border-top">
+                    <a th:href="@{/motos}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left me-2"></i>
+                        Voltar
+                    </a>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save me-2"></i>
+                        <span th:text="${moto.id != null ? 'Atualizar' : 'Salvar'}">Salvar</span>
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 
     <!-- Footer -->
-    <footer th:replace="~{fragments/footer}"></footer>
+    <div th:replace="~{fragments/footer :: footer}"></div>
 
+    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <div th:replace="~{fragments/messages :: messageScripts}"></div>
+    
     <script>
         // Máscara para placa
-        document.getElementById('placa').addEventListener('input', function (e) {
-            let value = e.target.value.replace(/[^A-Za-z0-9]/g, '');
-            if (value.length > 3) {
-                value = value.substring(0, 3) + '-' + value.substring(3, 7);
+        document.getElementById('placa').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/[^A-Za-z0-9]/g, '').toUpperCase();
+            let formattedValue;
+            
+            if (value.length <= 7) {
+                // Formato antigo: ABC-1234
+                formattedValue = value.replace(/([A-Z]{3})(\d{1,4})/, '$1-$2');
+            } else {
+                // Formato Mercosul: ABC1D23
+                formattedValue = value.replace(/([A-Z]{3})(\d{1})([A-Z]{1})(\d{1,2})/, '$1$2$3$4');
             }
-            e.target.value = value.toUpperCase();
+            
+            e.target.value = formattedValue;
+        });
+        
+        // Validação de ano
+        document.getElementById('ano').addEventListener('input', function(e) {
+            const currentYear = new Date().getFullYear();
+            const value = parseInt(e.target.value);
+            
+            if (value && (value < 1900 || value > currentYear + 1)) {
+                e.target.setCustomValidity('Ano deve estar entre 1900 e ' + (currentYear + 1));
+            } else {
+                e.target.setCustomValidity('');
+            }
+        });
+        
+        // Validação do formulário
+        (function() {
+            'use strict';
+            window.addEventListener('load', function() {
+                const form = document.querySelector('form');
+                form.addEventListener('submit', function(event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            }, false);
+        })();
+        
+        // Busca CEP
+        document.getElementById('cep').addEventListener('blur', function() {
+            const cep = this.value.replace(/\D/g, '');
+            if (cep.length === 8) {
+                fetch(`https://viacep.com.br/ws/${cep}/json/`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (!data.erro) {
+                            document.getElementById('endereco').value = data.logradouro || '';
+                            document.getElementById('bairro').value = data.bairro || '';
+                            document.getElementById('cidade').value = data.localidade || '';
+                            document.getElementById('estado').value = data.uf || '';
+                        }
+                    })
+                    .catch(error => console.log('Erro ao buscar CEP:', error));
+            }
         });
     </script>
 </body>
 </html>
+
+

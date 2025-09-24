@@ -1,7 +1,7 @@
 <!-- Fragmento: Cabeçalho -->
 <div th:fragment="header">
     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
-        <div class="container">
+        <div class="container-fluid">
             <!-- Logo/Brand -->
             <a class="navbar-brand d-flex align-items-center" th:href="@{/}">
                 <i class="fas fa-motorcycle me-2 text-primary" style="font-size: 1.5rem;"></i>
@@ -16,24 +16,71 @@
             
             <!-- Navigation -->
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
+                <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link fw-semibold text-dark me-3 d-flex align-items-center" th:href="@{/motos}">
-                            <i class="fas fa-motorcycle me-2 text-primary"></i>
-                            Motos
+                        <a class="nav-link fw-semibold text-dark me-3 d-flex align-items-center" th:href="@{/}">
+                            <i class="fas fa-home me-2 text-info"></i>
+                            Início
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link fw-semibold text-dark me-3 d-flex align-items-center" th:href="@{/patios}">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle fw-semibold text-dark me-3 d-flex align-items-center" 
+                           href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-building me-2 text-warning"></i>
+                            Filiais
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" th:href="@{/filiais}"><i class="fas fa-list me-2"></i>Listar Filiais</a></li>
+                            <li><a class="dropdown-item" th:href="@{/filiais/novo}"><i class="fas fa-plus me-2"></i>Nova Filial</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" th:href="@{/filiais/relatorio}"><i class="fas fa-chart-bar me-2"></i>Relatório</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle fw-semibold text-dark me-3 d-flex align-items-center" 
+                           href="#" id="patiosDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fas fa-warehouse me-2 text-success"></i>
                             Pátios
                         </a>
+                        <ul class="dropdown-menu" aria-labelledby="patiosDropdown">
+                            <li><a class="dropdown-item" th:href="@{/patios}"><i class="fas fa-list me-2"></i>Listar Pátios</a></li>
+                            <li><a class="dropdown-item" th:href="@{/patios/novo}"><i class="fas fa-plus me-2"></i>Novo Pátio</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" th:href="@{/patios/relatorio}"><i class="fas fa-chart-bar me-2"></i>Relatório</a></li>
+                        </ul>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link fw-semibold text-dark d-flex align-items-center" th:href="@{/swagger-ui.html}" target="_blank">
-                            <i class="fas fa-code me-2 text-warning"></i>
-                            API
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle fw-semibold text-dark me-3 d-flex align-items-center" 
+                           href="#" id="motosDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-motorcycle me-2 text-primary"></i>
+                            Motos
                         </a>
+                        <ul class="dropdown-menu" aria-labelledby="motosDropdown">
+                            <li><a class="dropdown-item" th:href="@{/motos}"><i class="fas fa-list me-2"></i>Listar Motos</a></li>
+                            <li><a class="dropdown-item" th:href="@{/motos/novo}"><i class="fas fa-plus me-2"></i>Nova Moto</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" th:href="@{/motos/disponveis}"><i class="fas fa-check-circle me-2"></i>Disponíveis</a></li>
+                            <li><a class="dropdown-item" th:href="@{/motos/manutencao}"><i class="fas fa-wrench me-2"></i>Em Manutenção</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                
+                <!-- User Menu -->
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle fw-semibold text-dark d-flex align-items-center" 
+                           href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-user-circle me-2 text-secondary"></i>
+                            <span th:text="${#authentication.name ?: 'Usuário'}">Usuário</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Perfil</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Configurações</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" th:href="@{/swagger-ui.html}" target="_blank"><i class="fas fa-code me-2"></i>API Docs</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt me-2"></i>Sair</a></li>
+                        </ul>
                     </li>
                 </ul>
             </div>

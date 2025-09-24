@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:text="${titulo ?: 'Formulário de Moto'} + ' - FleetZone'">Formulário de Moto - FleetZone</title>
+    <title th:text="${titulo ?: 'Formulário de Filial'} + ' - FleetZone'">Formulário de Filial - FleetZone</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -17,12 +17,12 @@
             margin-bottom: 40px;
         }
         .page-header {
-            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
             color: white;
             border-radius: 15px;
             padding: 2rem;
             margin-bottom: 2rem;
-            box-shadow: 0 8px 32px rgba(231, 76, 60, 0.2);
+            box-shadow: 0 8px 32px rgba(243, 156, 18, 0.2);
         }
         .page-title {
             color: white;
@@ -63,7 +63,7 @@
             font-size: 0.95rem;
         }
         .form-control:focus, .form-select:focus {
-            border-color: #e74c3c;
+            border-color: #f39c12;
             box-shadow: 0 0 0 0.2rem rgba(243, 156, 18, 0.25);
         }
         .input-group-text {
@@ -78,23 +78,23 @@
             border-radius: 0 10px 10px 0;
         }
         .input-group:focus-within .input-group-text {
-            border-color: #e74c3c;
+            border-color: #f39c12;
             background: #fff8f0;
-            color: #e74c3c;
+            color: #f39c12;
         }
         .btn-primary {
-            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
             border: none;
             color: white;
             font-weight: 600;
             padding: 0.75rem 2rem;
             border-radius: 10px;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+            box-shadow: 0 4px 15px rgba(243, 156, 18, 0.3);
         }
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
+            box-shadow: 0 6px 20px rgba(243, 156, 18, 0.4);
             color: white;
         }
         .btn-secondary {
@@ -116,13 +116,13 @@
             font-size: 1.2rem;
             margin-bottom: 1.5rem;
             padding-bottom: 0.5rem;
-            border-bottom: 2px solid #e74c3c;
+            border-bottom: 2px solid #f39c12;
             display: flex;
             align-items: center;
             gap: 0.75rem;
         }
         .section-title i {
-            color: #e74c3c;
+            color: #f39c12;
             font-size: 1.4rem;
         }
         .required {
@@ -143,8 +143,8 @@
             margin-top: 0.5rem;
         }
         .form-check-input:checked {
-            background-color: #e74c3c;
-            border-color: #e74c3c;
+            background-color: #f39c12;
+            border-color: #f39c12;
         }
         .form-check-input:focus {
             box-shadow: 0 0 0 0.2rem rgba(243, 156, 18, 0.25);
@@ -192,18 +192,18 @@
                         <a th:href="@{/}"><i class="fas fa-home me-1"></i>Início</a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a th:href="@{/motos}"><i class="fas fa-motorcycle me-1"></i>Motos</a>
+                        <a th:href="@{/filiais}"><i class="fas fa-building me-1"></i>Filiais</a>
                     </li>
                     <li class="breadcrumb-item active" th:text="${titulo ?: 'Formulário'}">Formulário</li>
                 </ol>
             </nav>
             
             <h1 class="page-title">
-                <i class="fas fa-motorcycle"></i>
-                <span th:text="${titulo ?: 'Formulário de Moto'}">Formulário de Moto</span>
+                <i class="fas fa-building"></i>
+                <span th:text="${titulo ?: 'Formulário de Filial'}">Formulário de Filial</span>
             </h1>
-            <p class="mb-0 mt-2 opacity-75" th:text="${moto.id != null ? 'Edite as informações da moto' : 'Preencha os dados para cadastrar uma nova moto'}">
-                Preencha os dados da moto
+            <p class="mb-0 mt-2 opacity-75" th:text="${filial.id != null ? 'Edite as informações da filial' : 'Preencha os dados para criar uma nova filial'}">
+                Preencha os dados da filial
             </p>
         </div>
 
@@ -215,8 +215,8 @@
 
         <!-- Form Card -->
         <div class="form-card">
-            <form th:action="${action ?: '/motos/salvar'}" th:object="${moto}" method="post" novalidate>
-                <input type="hidden" th:field="*{id}" th:if="${moto.id != null}">
+            <form th:action="${action ?: '/filiais/salvar'}" th:object="${filial}" method="post" novalidate>
+                <input type="hidden" th:field="*{id}" th:if="${filial.id != null}">
                 
                 <!-- Dados Básicos -->
                 <div class="section-title">
@@ -227,47 +227,47 @@
                 <div class="row g-3">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="placa" class="form-label">
-                                <i class="fas fa-id-card"></i>
-                                Placa <span class="required">*</span>
+                            <label for="codigo" class="form-label">
+                                <i class="fas fa-hashtag"></i>
+                                Código <span class="required">*</span>
                             </label>
                             <div class="input-group">
                                 <span class="input-group-text">
-                                    <i class="fas fa-id-card"></i>
+                                    <i class="fas fa-hashtag"></i>
                                 </span>
                                 <input type="text" 
-                                       id="placa" 
-                                       th:field="*{placa}"
-                                       class="form-control placa-input"
-                                       placeholder="Ex: ABC-1234"
-                                       maxlength="8"
+                                       id="codigo" 
+                                       th:field="*{codigo}"
+                                       class="form-control"
+                                       placeholder="Ex: FIL001"
+                                       maxlength="10"
                                        required>
                             </div>
-                            <div class="help-text">Placa da moto (formato ABC-1234 ou ABC1D23)</div>
-                            <div class="invalid-feedback" th:if="${#fields.hasErrors('placa')}" th:errors="*{placa}"></div>
+                            <div class="help-text">Código único da filial (máx. 10 caracteres)</div>
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('codigo')}" th:errors="*{codigo}"></div>
                         </div>
                     </div>
                     
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="marca" class="form-label">
-                                <i class="fas fa-tag"></i>
-                                Marca <span class="required">*</span>
+                            <label for="nome" class="form-label">
+                                <i class="fas fa-building"></i>
+                                Nome da Filial <span class="required">*</span>
                             </label>
                             <div class="input-group">
                                 <span class="input-group-text">
-                                    <i class="fas fa-tag"></i>
+                                    <i class="fas fa-building"></i>
                                 </span>
                                 <input type="text" 
-                                       id="marca" 
-                                       th:field="*{marca}"
+                                       id="nome" 
+                                       th:field="*{nome}"
                                        class="form-control"
-                                       placeholder="Ex: Honda, Yamaha, Suzuki"
-                                       maxlength="50"
+                                       placeholder="Nome da filial"
+                                       maxlength="100"
                                        required>
                             </div>
-                            <div class="help-text">Marca da moto (máx. 50 caracteres)</div>
-                            <div class="invalid-feedback" th:if="${#fields.hasErrors('marca')}" th:errors="*{marca}"></div>
+                            <div class="help-text">Nome completo da filial (máx. 100 caracteres)</div>
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></div>
                         </div>
                     </div>
                 </div>
@@ -275,180 +275,210 @@
                 <div class="row g-3">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="modelo" class="form-label">
-                                <i class="fas fa-motorcycle"></i>
-                                Modelo <span class="required">*</span>
+                            <label for="telefone" class="form-label">
+                                <i class="fas fa-phone"></i>
+                                Telefone <span class="required">*</span>
                             </label>
                             <div class="input-group">
                                 <span class="input-group-text">
-                                    <i class="fas fa-motorcycle"></i>
+                                    <i class="fas fa-phone"></i>
                                 </span>
-                                <input type="text" 
-                                       id="modelo" 
-                                       th:field="*{modelo}"
+                                <input type="tel" 
+                                       id="telefone" 
+                                       th:field="*{telefone}"
                                        class="form-control"
-                                       placeholder="Ex: CG 160, CB 600F, MT-03"
-                                       maxlength="50"
+                                       placeholder="(11) 99999-9999"
+                                       maxlength="15"
                                        required>
                             </div>
-                            <div class="help-text">Modelo da moto (máx. 50 caracteres)</div>
-                            <div class="invalid-feedback" th:if="${#fields.hasErrors('modelo')}" th:errors="*{modelo}"></div>
+                            <div class="help-text">Telefone de contato da filial</div>
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('telefone')}" th:errors="*{telefone}"></div>
                         </div>
                     </div>
                     
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="ano" class="form-label">
-                                <i class="fas fa-calendar"></i>
-                                Ano <span class="required">*</span>
+                            <label for="email" class="form-label">
+                                <i class="fas fa-envelope"></i>
+                                E-mail
                             </label>
                             <div class="input-group">
                                 <span class="input-group-text">
-                                    <i class="fas fa-calendar"></i>
+                                    <i class="fas fa-envelope"></i>
                                 </span>
-                                <input type="number" 
-                                       id="ano" 
-                                       th:field="*{ano}"
+                                <input type="email" 
+                                       id="email" 
+                                       th:field="*{email}"
                                        class="form-control"
-                                       placeholder="Ex: 2024"
-                                       min="1900"
-                                       max="2030"
-                                       required>
+                                       placeholder="email@empresa.com"
+                                       maxlength="150">
                             </div>
-                            <div class="help-text">Ano de fabricação da moto</div>
-                            <div class="invalid-feedback" th:if="${#fields.hasErrors('ano')}" th:errors="*{ano}"></div>
+                            <div class="help-text">E-mail de contato da filial (opcional)</div>
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Características -->
+                <!-- Endereço -->
+                <div class="section-title mt-4">
+                    <i class="fas fa-map-marker-alt"></i>
+                    Endereço
+                </div>
+                
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="cep" class="form-label">
+                                <i class="fas fa-mail-bulk"></i>
+                                CEP
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="fas fa-mail-bulk"></i>
+                                </span>
+                                <input type="text" 
+                                       id="cep" 
+                                       th:field="*{cep}"
+                                       class="form-control"
+                                       placeholder="00000-000"
+                                       maxlength="9">
+                            </div>
+                            <div class="help-text">CEP da localização</div>
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('cep')}" th:errors="*{cep}"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-9">
+                        <div class="form-group">
+                            <label for="endereco" class="form-label">
+                                <i class="fas fa-road"></i>
+                                Endereço
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="fas fa-road"></i>
+                                </span>
+                                <input type="text" 
+                                       id="endereco" 
+                                       th:field="*{endereco}"
+                                       class="form-control"
+                                       placeholder="Rua, Av., etc."
+                                       maxlength="200">
+                            </div>
+                            <div class="help-text">Endereço completo da filial</div>
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('endereco')}" th:errors="*{endereco}"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-3">
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label for="numero" class="form-label">
+                                <i class="fas fa-sort-numeric-up"></i>
+                                Número
+                            </label>
+                            <input type="text" 
+                                   id="numero" 
+                                   th:field="*{numero}"
+                                   class="form-control"
+                                   placeholder="123"
+                                   maxlength="10">
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('numero')}" th:errors="*{numero}"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="bairro" class="form-label">
+                                <i class="fas fa-map"></i>
+                                Bairro
+                            </label>
+                            <input type="text" 
+                                   id="bairro" 
+                                   th:field="*{bairro}"
+                                   class="form-control"
+                                   placeholder="Nome do bairro"
+                                   maxlength="100">
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('bairro')}" th:errors="*{bairro}"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="cidade" class="form-label">
+                                <i class="fas fa-city"></i>
+                                Cidade <span class="required">*</span>
+                            </label>
+                            <input type="text" 
+                                   id="cidade" 
+                                   th:field="*{cidade}"
+                                   class="form-control"
+                                   placeholder="Nome da cidade"
+                                   maxlength="100"
+                                   required>
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('cidade')}" th:errors="*{cidade}"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label for="estado" class="form-label">
+                                <i class="fas fa-flag"></i>
+                                Estado <span class="required">*</span>
+                            </label>
+                            <select id="estado" th:field="*{estado}" class="form-select" required>
+                                <option value="">Selecione</option>
+                                <option value="AC">Acre</option>
+                                <option value="AL">Alagoas</option>
+                                <option value="AP">Amapá</option>
+                                <option value="AM">Amazonas</option>
+                                <option value="BA">Bahia</option>
+                                <option value="CE">Ceará</option>
+                                <option value="DF">Distrito Federal</option>
+                                <option value="ES">Espírito Santo</option>
+                                <option value="GO">Goiás</option>
+                                <option value="MA">Maranhão</option>
+                                <option value="MT">Mato Grosso</option>
+                                <option value="MS">Mato Grosso do Sul</option>
+                                <option value="MG">Minas Gerais</option>
+                                <option value="PA">Pará</option>
+                                <option value="PB">Paraíba</option>
+                                <option value="PR">Paraná</option>
+                                <option value="PE">Pernambuco</option>
+                                <option value="PI">Piauí</option>
+                                <option value="RJ">Rio de Janeiro</option>
+                                <option value="RN">Rio Grande do Norte</option>
+                                <option value="RS">Rio Grande do Sul</option>
+                                <option value="RO">Rondônia</option>
+                                <option value="RR">Roraima</option>
+                                <option value="SC">Santa Catarina</option>
+                                <option value="SP">São Paulo</option>
+                                <option value="SE">Sergipe</option>
+                                <option value="TO">Tocantins</option>
+                            </select>
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('estado')}" th:errors="*{estado}"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Status e Observações -->
                 <div class="section-title mt-4">
                     <i class="fas fa-cogs"></i>
-                    Características
-                </div>
-                
-                <div class="row g-3">
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="cor" class="form-label">
-                                <i class="fas fa-palette"></i>
-                                Cor <span class="required">*</span>
-                            </label>
-                            <div class="input-group">
-                                <span class="input-group-text">
-                                    <i class="fas fa-palette"></i>
-                                </span>
-                                <input type="text" 
-                                       id="cor" 
-                                       th:field="*{cor}"
-                                       class="form-control"
-                                       placeholder="Ex: Vermelha, Azul, Preta"
-                                       maxlength="30"
-                                       required>
-                            </div>
-                            <div class="help-text">Cor da moto</div>
-                            <div class="invalid-feedback" th:if="${#fields.hasErrors('cor')}" th:errors="*{cor}"></div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="cilindrada" class="form-label">
-                                <i class="fas fa-tachometer-alt"></i>
-                                Cilindrada
-                            </label>
-                            <div class="input-group">
-                                <span class="input-group-text">
-                                    <i class="fas fa-tachometer-alt"></i>
-                                </span>
-                                <input type="number" 
-                                       id="cilindrada" 
-                                       th:field="*{cilindrada}"
-                                       class="form-control"
-                                       placeholder="Ex: 160, 600, 1000"
-                                       min="50"
-                                       max="2000">
-                                <span class="input-group-text">cc</span>
-                            </div>
-                            <div class="help-text">Cilindrada da moto em cc</div>
-                            <div class="invalid-feedback" th:if="${#fields.hasErrors('cilindrada')}" th:errors="*{cilindrada}"></div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="patio" class="form-label">
-                                <i class="fas fa-warehouse"></i>
-                                Pátio <span class="required">*</span>
-                            </label>
-                            <select id="patio" th:field="*{patio}" class="form-select" required>
-                                <option value="">Selecione um pátio</option>
-                                <option th:each="patio : ${patios}" 
-                                        th:value="${patio.id}" 
-                                        th:text="${patio.nome}"
-                                        th:selected="${moto.patio != null and moto.patio.id == patio.id}">
-                                    Pátio
-                                </option>
-                            </select>
-                            <div class="help-text">Pátio onde a moto está localizada</div>
-                            <div class="invalid-feedback" th:if="${#fields.hasErrors('patio')}" th:errors="*{patio}"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row g-3">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label for="observacoes" class="form-label">
-                                <i class="fas fa-sticky-note"></i>
-                                Observações
-                            </label>
-                            <textarea id="observacoes" 
-                                      th:field="*{observacoes}"
-                                      class="form-control"
-                                      rows="3"
-                                      placeholder="Observações adicionais sobre a moto..."
-                                      maxlength="500"></textarea>
-                            <div class="help-text">Informações adicionais sobre a moto (opcional)</div>
-                            <div class="invalid-feedback" th:if="${#fields.hasErrors('observacoes')}" th:errors="*{observacoes}"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Status -->
-                <div class="section-title mt-4">
-                    <i class="fas fa-info-circle"></i>
-                    Status
+                    Configurações
                 </div>
                 
                 <div class="row g-3">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="status" class="form-label">
-                                <i class="fas fa-check-circle"></i>
-                                Status da Moto <span class="required">*</span>
-                            </label>
-                            <select id="status" th:field="*{status}" class="form-select" required>
-                                <option value="">Selecione o status</option>
-                                <option value="DISPONIVEL">Disponível</option>
-                                <option value="EM_USO">Em Uso</option>
-                                <option value="MANUTENCAO">Em Manutenção</option>
-                                <option value="INATIVA">Inativa</option>
-                            </select>
-                            <div class="help-text">Status atual da moto</div>
-                            <div class="invalid-feedback" th:if="${#fields.hasErrors('status')}" th:errors="*{status}"></div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <div class="form-check mt-4">
-                                <input class="form-check-input" type="checkbox" id="disponivel" th:field="*{disponivel}">
-                                <label class="form-check-label" for="disponivel">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="ativa" th:field="*{ativa}">
+                                <label class="form-check-label" for="ativa">
                                     <i class="fas fa-toggle-on text-success me-1"></i>
-                                    Moto Disponível
+                                    Filial Ativa
                                 </label>
                             </div>
-                            <div class="help-text">Marque se a moto está disponível para uso</div>
+                            <div class="help-text">Marque se a filial está em funcionamento</div>
                         </div>
                     </div>
                     
@@ -462,7 +492,7 @@
                                     th:field="*{observacoes}"
                                     class="form-control"
                                     rows="4"
-                                    placeholder="Informações adicionais sobre a moto..."
+                                    placeholder="Informações adicionais sobre a filial..."
                                     maxlength="500"></textarea>
                             <div class="help-text">Informações adicionais (máx. 500 caracteres)</div>
                             <div class="invalid-feedback" th:if="${#fields.hasErrors('observacoes')}" th:errors="*{observacoes}"></div>
@@ -472,13 +502,13 @@
 
                 <!-- Buttons -->
                 <div class="d-flex justify-content-between mt-4 pt-3 border-top">
-                    <a th:href="@{/motos}" class="btn btn-secondary">
+                    <a th:href="@{/filiais}" class="btn btn-secondary">
                         <i class="fas fa-arrow-left me-2"></i>
                         Voltar
                     </a>
                     <button type="submit" class="btn btn-primary">
                         <i class="fas fa-save me-2"></i>
-                        <span th:text="${moto.id != null ? 'Atualizar' : 'Salvar'}">Salvar</span>
+                        <span th:text="${filial.id != null ? 'Atualizar' : 'Salvar'}">Salvar</span>
                     </button>
                 </div>
             </form>
@@ -493,32 +523,25 @@
     <div th:replace="~{fragments/messages :: messageScripts}"></div>
     
     <script>
-        // Máscara para placa
-        document.getElementById('placa').addEventListener('input', function(e) {
-            let value = e.target.value.replace(/[^A-Za-z0-9]/g, '').toUpperCase();
+        // Máscara para telefone
+        document.getElementById('telefone').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
             let formattedValue;
             
-            if (value.length <= 7) {
-                // Formato antigo: ABC-1234
-                formattedValue = value.replace(/([A-Z]{3})(\d{1,4})/, '$1-$2');
+            if (value.length <= 10) {
+                formattedValue = value.replace(/(\d{2})(\d{4})(\d{4})/, '($1) $2-$3');
             } else {
-                // Formato Mercosul: ABC1D23
-                formattedValue = value.replace(/([A-Z]{3})(\d{1})([A-Z]{1})(\d{1,2})/, '$1$2$3$4');
+                formattedValue = value.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
             }
             
             e.target.value = formattedValue;
         });
         
-        // Validação de ano
-        document.getElementById('ano').addEventListener('input', function(e) {
-            const currentYear = new Date().getFullYear();
-            const value = parseInt(e.target.value);
-            
-            if (value && (value < 1900 || value > currentYear + 1)) {
-                e.target.setCustomValidity('Ano deve estar entre 1900 e ' + (currentYear + 1));
-            } else {
-                e.target.setCustomValidity('');
-            }
+        // Máscara para CEP
+        document.getElementById('cep').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            let formattedValue = value.replace(/(\d{5})(\d{3})/, '$1-$2');
+            e.target.value = formattedValue;
         });
         
         // Validação do formulário
@@ -556,5 +579,3 @@
     </script>
 </body>
 </html>
-
-

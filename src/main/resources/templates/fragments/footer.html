@@ -1,7 +1,60 @@
 <!-- Fragmento: Rodapé -->
 <div th:fragment="footer">
-    <footer>
-        <hr>
-        <p>&copy; 2025 FleetZone - Todos os direitos reservados.</p>
+    <footer class="bg-dark text-light py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="fas fa-motorcycle me-2 text-primary" style="font-size: 1.5rem;"></i>
+                        <h5 class="mb-0 text-white">FleetZone</h5>
+                    </div>
+                    <p class="text-muted mb-2">Sistema de Gestão de Frotas de Motocicletas</p>
+                    <p class="text-muted small mb-0">Controle total da sua frota com tecnologia e eficiência.</p>
+                </div>
+                <div class="col-md-3">
+                    <h6 class="text-white mb-3">Links Rápidos</h6>
+                    <ul class="list-unstyled">
+                        <li><a th:href="@{/motos}" class="text-muted text-decoration-none small"><i class="fas fa-motorcycle me-2"></i>Motos</a></li>
+                        <li><a th:href="@{/patios}" class="text-muted text-decoration-none small"><i class="fas fa-warehouse me-2"></i>Pátios</a></li>
+                        <li><a th:href="@{/filiais}" class="text-muted text-decoration-none small"><i class="fas fa-building me-2"></i>Filiais</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h6 class="text-white mb-3">Suporte</h6>
+                    <ul class="list-unstyled">
+                        <li><a th:href="@{/swagger-ui.html}" target="_blank" class="text-muted text-decoration-none small"><i class="fas fa-code me-2"></i>API Docs</a></li>
+                        <li><a href="#" class="text-muted text-decoration-none small"><i class="fas fa-question-circle me-2"></i>Ajuda</a></li>
+                        <li><a href="#" class="text-muted text-decoration-none small"><i class="fas fa-envelope me-2"></i>Contato</a></li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="border-secondary my-3">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <p class="text-muted small mb-0">&copy; 2025 FleetZone. Todos os direitos reservados.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p class="text-muted small mb-0">
+                        Desenvolvido com <i class="fas fa-heart text-danger"></i> para gestão de frotas
+                    </p>
+                </div>
+            </div>
+        </div>
     </footer>
 </div>
+
+<!-- Estilos adicionais para o footer -->
+<style th:fragment="footerStyles">
+    footer a:hover {
+        color: #ffffff !important;
+        transition: color 0.3s ease;
+    }
+    
+    footer .list-unstyled li {
+        margin-bottom: 0.5rem;
+    }
+    
+    .border-secondary {
+        opacity: 0.3;
+    }
+</style>
