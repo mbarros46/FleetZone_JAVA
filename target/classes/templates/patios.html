@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -469,7 +469,8 @@
                                         <a th:href="@{/patios/excluir/{id}(id=${patio.id})}" 
                                            class="btn-action btn-delete"
                                            title="Excluir pátio"
-                                           onclick="return confirm('Tem certeza que deseja excluir este pátio?')">
+                                           onclick="return confirm('Tem certeza que deseja excluir este pátio?')"
+                                           sec:authorize="hasRole('ADMIN')">
                                             <i class="fas fa-trash"></i>
                                             Excluir
                                         </a>
