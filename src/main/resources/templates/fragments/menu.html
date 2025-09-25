@@ -4,6 +4,19 @@
         <ul>
             <li><a th:href="@{/motos}">Motos</a></li>
             <li><a th:href="@{/patios}">Pátios</a></li>
+            <li><a th:href="@{/filiais}">Filiais</a></li>
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle">Relatórios</a>
+                <ul class="dropdown-menu">
+                    <li><a th:href="@{/relatorios/motos-por-patio}">Motos por Pátio</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle">Operações</a>
+                <ul class="dropdown-menu">
+                    <li><a th:href="@{/operacoes/transferir-moto}">Transferir Moto</a></li>
+                </ul>
+            </li>
         </ul>
     </nav>
 </div>
