@@ -112,4 +112,3 @@ Ou no VS Code com Spring Boot Extensions.
 - Pedro Valentim Merise (RM556826)
 - Thomas Rodrigues (558042)
 
-## .\run-dev.bat
