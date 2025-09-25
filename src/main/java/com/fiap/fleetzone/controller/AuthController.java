@@ -7,7 +7,8 @@ import com.fiap.fleetzone.model.User;
 import com.fiap.fleetzone.repository.UserRepository;
 import com.fiap.fleetzone.security.TokenService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -15,10 +16,10 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final UserRepository users;
-    private final BCryptPasswordEncoder encoder;
+    private final PasswordEncoder encoder;
     private final TokenService tokens;
 
-    public AuthController(UserRepository users, BCryptPasswordEncoder encoder, TokenService tokens) {
+    public AuthController(UserRepository users, PasswordEncoder encoder, TokenService tokens) {
         this.users = users;
         this.encoder = encoder;
         this.tokens = tokens;
