@@ -3,6 +3,16 @@
 
 API Restful desenvolvida com Java e Spring Boot para gerenciamento de motos e pátios, como parte da Sprint 1 do Challenge FIAP 2025.
 
+## 👨‍💼 Administrador
+- Email: admin@fleetzone.com
+- Senha: admin123
+- Perfil: ADMIN (acesso total ao sistema)
+
+## 👤 Usuário
+- Email: user@fleetzone.com
+- Senha: user123
+- Perfil: USER (acesso limitado)
+
 ## 🚀 Tecnologias Utilizadas
 
 - Java 17
