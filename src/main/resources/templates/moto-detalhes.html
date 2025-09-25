@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="'Moto ' + ${moto.modelo} + ' - FleetZone'">Detalhes da Moto - FleetZone</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .main-container {
+            margin-top: 20px;
+            margin-bottom: 40px;
+        }
+        .page-header {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 32px rgba(52, 152, 219, 0.2);
+        }
+        .page-title {
+            color: white;
+            font-weight: 700;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .page-title i {
+            color: #fff;
+            font-size: 2.5rem;
+        }
+        .content-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            margin-bottom: 2rem;
+        }
+        .info-section {
+            margin-bottom: 2rem;
+        }
+        .section-title {
+            color: #2c3e50;
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #3498db;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .section-title i {
+            color: #3498db;
+            font-size: 1.4rem;
+        }
+        .info-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding: 0.75rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #3498db;
+        }
+        .info-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            margin-right: 1rem;
+            flex-shrink: 0;
+        }
+        .info-label {
+            font-weight: 600;
+            color: #2c3e50;
+            min-width: 120px;
+            margin-right: 1rem;
+        }
+        .info-value {
+            color: #34495e;
+            flex-grow: 1;
+        }
+        .status-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .status-disponivel {
+            background: #d4edda;
+            color: #155724;
+        }
+        .status-manutencao {
+            background: #fff3cd;
+            color: #856404;
+        }
+        .status-alugada {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .stats-card {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 32px rgba(231, 76, 60, 0.2);
+        }
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+        .stat-icon i {
+            font-size: 1.5rem;
+        }
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+            border: none;
+            border-radius: 10px;
+            padding: 0.75rem 2rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #229954 0%, #1e8449 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(39, 174, 96, 0.3);
+        }
+        .btn-secondary {
+            background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);
+            border: none;
+            border-radius: 10px;
+            padding: 0.75rem 2rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, #7f8c8d 0%, #6c7b7d 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(149, 165, 166, 0.3);
+        }
+        .breadcrumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+        .breadcrumb-item a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .breadcrumb-item a:hover {
+            color: white;
+        }
+        .breadcrumb-item.active {
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div th:replace="~{fragments/header :: header}"></div>
+
+    <div class="container main-container">
+        <div class="page-header">
+            <!-- Breadcrumb -->
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a th:href="@{/}"><i class="fas fa-home me-1"></i>Início</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a th:href="@{/motos}"><i class="fas fa-motorcycle me-1"></i>Motos</a>
+                    </li>
+                    <li class="breadcrumb-item active" th:text="${moto.modelo + ' - ' + moto.placa}">Detalhes da Moto</li>
+                </ol>
+            </nav>
+            
+            <h1 class="page-title">
+                <i class="fas fa-motorcycle"></i>
+                <span th:text="${moto.modelo}">Modelo da Moto</span>
+            </h1>
+            <p class="mb-0 mt-2 opacity-75">Visualize as informações detalhadas da motocicleta</p>
+        </div>
+
+        <!-- Messages -->
+        <div th:replace="~{fragments/messages :: messages}"></div>
+
+        <div class="row">
+            <!-- Main Content -->
+            <div class="col-lg-8">
+                <!-- Moto Info -->
+                <div class="content-card">
+                    <div class="info-section">
+                        <h3 class="section-title">
+                            <i class="fas fa-info-circle"></i>
+                            Informações da Motocicleta
+                        </h3>
+
+                        <div class="info-item">
+                            <div class="info-icon">
+                                <i class="fas fa-hashtag"></i>
+                            </div>
+                            <div class="info-label">ID:</div>
+                            <div class="info-value" th:text="${moto.id}">123</div>
+                        </div>
+
+                        <div class="info-item">
+                            <div class="info-icon">
+                                <i class="fas fa-id-card"></i>
+                            </div>
+                            <div class="info-label">Placa:</div>
+                            <div class="info-value">
+                                <strong th:text="${moto.placa}">ABC-1234</strong>
+                            </div>
+                        </div>
+
+                        <div class="info-item">
+                            <div class="info-icon">
+                                <i class="fas fa-tag"></i>
+                            </div>
+                            <div class="info-label">Marca:</div>
+                            <div class="info-value" th:text="${moto.marca ?: 'Não informado'}">Honda</div>
+                        </div>
+
+                        <div class="info-item">
+                            <div class="info-icon">
+                                <i class="fas fa-motorcycle"></i>
+                            </div>
+                            <div class="info-label">Modelo:</div>
+                            <div class="info-value" th:text="${moto.modelo}">CG 160</div>
+                        </div>
+
+                        <div class="info-item">
+                            <div class="info-icon">
+                                <i class="fas fa-calendar"></i>
+                            </div>
+                            <div class="info-label">Ano:</div>
+                            <div class="info-value" th:text="${moto.ano ?: 'Não informado'}">2023</div>
+                        </div>
+
+                        <div class="info-item">
+                            <div class="info-icon">
+                                <i class="fas fa-palette"></i>
+                            </div>
+                            <div class="info-label">Cor:</div>
+                            <div class="info-value" th:text="${moto.cor ?: 'Não informado'}">Vermelha</div>
+                        </div>
+
+                        <div class="info-item">
+                            <div class="info-icon">
+                                <i class="fas fa-tachometer-alt"></i>
+                            </div>
+                            <div class="info-label">Cilindrada:</div>
+                            <div class="info-value" th:text="${moto.cilindrada != null ? moto.cilindrada + 'cc' : 'Não informado'}">160cc</div>
+                        </div>
+
+                        <div class="info-item">
+                            <div class="info-icon">
+                                <i class="fas fa-info-circle"></i>
+                            </div>
+                            <div class="info-label">Status:</div>
+                            <div class="info-value">
+                                <span class="status-badge"
+                                      th:classappend="${moto.status == 'DISPONIVEL'} ? 'status-disponivel' : (${moto.status == 'MANUTENCAO'} ? 'status-manutencao' : 'status-alugada')"
+                                      th:text="${moto.status ?: 'DISPONÍVEL'}">DISPONÍVEL</span>
+                            </div>
+                        </div>
+
+                        <div class="info-item" th:if="${moto.patio}">
+                            <div class="info-icon">
+                                <i class="fas fa-warehouse"></i>
+                            </div>
+                            <div class="info-label">Pátio:</div>
+                            <div class="info-value">
+                                <a th:href="@{/patios/{id}(id=${moto.patio.id})}" 
+                                   th:text="${moto.patio.nome}"
+                                   class="text-decoration-none">Nome do Pátio</a>
+                            </div>
+                        </div>
+
+                        <div class="info-item" th:if="${moto.observacoes}">
+                            <div class="info-icon">
+                                <i class="fas fa-comment"></i>
+                            </div>
+                            <div class="info-label">Observações:</div>
+                            <div class="info-value" th:text="${moto.observacoes}">Observações da moto</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="col-lg-4">
+                <!-- Status Card -->
+                <div class="stats-card" th:classappend="${moto.status == 'DISPONIVEL'} ? 'bg-success' : (${moto.status == 'MANUTENCAO'} ? 'bg-warning' : 'bg-danger')">
+                    <div class="stat-icon">
+                        <i class="fas fa-motorcycle"></i>
+                    </div>
+                    <div class="stat-value" th:text="${moto.status ?: 'DISPONÍVEL'}">DISPONÍVEL</div>
+                    <div class="stat-label">Status da Motocicleta</div>
+                </div>
+
+                <!-- Actions -->
+                <div class="content-card">
+                    <h5 class="section-title">
+                        <i class="fas fa-cogs"></i>
+                        Ações
+                    </h5>
+                    
+                    <div class="d-grid gap-2">
+                        <a th:href="@{/motos/editar/{id}(id=${moto.id})}" class="btn btn-primary">
+                            <i class="fas fa-edit me-2"></i>Editar Moto
+                        </a>
+                        <a th:href="@{/motos}" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left me-2"></i>Voltar às Motos
+                        </a>
+                        <a th:href="@{/motos/excluir/{id}(id=${moto.id})}" 
+                           class="btn btn-outline-danger"
+                           onclick="return confirm('Tem certeza que deseja excluir esta moto?')">
+                            <i class="fas fa-trash me-2"></i>Excluir Moto
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div th:replace="~{fragments/footer :: footer}"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
