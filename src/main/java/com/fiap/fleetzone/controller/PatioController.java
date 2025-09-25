@@ -10,16 +10,18 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/patios")
-public class PatioController {
+public class PatioController extends BaseController {
 
     @Autowired
     private PatioRepository patioRepository;
 
     @GetMapping
     public String listarPatios(Model model) {
-        java.util.List<Patio> patios = patioRepository.findAll();
+        List<Patio> patios = patioRepository.findAll();
         model.addAttribute("patios", patios);
         return "patios";
     }
@@ -27,9 +29,7 @@ public class PatioController {
     // Exibir formulário de novo pátio
     @GetMapping("/novo")
     public String novoPatioForm(Model model) {
-        model.addAttribute("patio", new Patio());
-        model.addAttribute("titulo", "Novo Pátio");
-        model.addAttribute("action", "/patios/salvar");
+        prepareFormModel(model, new Patio(), "Novo " + getEntityType(), "/patios/salvar");
         return "patio-form";
     }
 
@@ -39,24 +39,20 @@ public class PatioController {
                               BindingResult result, 
                               Model model, 
                               RedirectAttributes redirectAttributes) {
-        if (result.hasErrors()) {
-            model.addAttribute("titulo", "Novo Pátio");
-            model.addAttribute("action", "/patios/salvar");
+        if (hasValidationErrors(result, model, "Novo " + getEntityType(), "/patios/salvar")) {
             return "patio-form";
         }
         
         patioRepository.save(patio);
-        redirectAttributes.addFlashAttribute("successMessage", "Pátio cadastrado com sucesso!");
-        return "redirect:/patios";
+        addSuccessMessage(redirectAttributes, buildCreateSuccessMessage(getEntityType(), patio.getNome()));
+        return getRedirectUrl();
     }
 
     // Exibir formulário de edição
     @GetMapping("/editar/{id}")
     public String editarPatioForm(@PathVariable Long id, Model model) {
         Patio patio = patioRepository.findById(id).orElseThrow();
-        model.addAttribute("patio", patio);
-        model.addAttribute("titulo", "Editar Pátio");
-        model.addAttribute("action", "/patios/atualizar/" + id);
+        prepareEditFormModel(model, patio, "Editar " + getEntityType(), "/patios/atualizar/" + id);
         return "patio-form";
     }
 
@@ -67,16 +63,14 @@ public class PatioController {
                                 BindingResult result, 
                                 Model model, 
                                 RedirectAttributes redirectAttributes) {
-        if (result.hasErrors()) {
-            model.addAttribute("titulo", "Editar Pátio");
-            model.addAttribute("action", "/patios/atualizar/" + id);
+        if (hasValidationErrors(result, model, "Editar " + getEntityType(), "/patios/atualizar/" + id)) {
             return "patio-form";
         }
         
         patio.setId(id);
         patioRepository.save(patio);
-        redirectAttributes.addFlashAttribute("successMessage", "Pátio atualizado com sucesso!");
-        return "redirect:/patios";
+        addSuccessMessage(redirectAttributes, buildUpdateSuccessMessage(getEntityType(), patio.getNome()));
+        return getRedirectUrl();
     }
 
     // Exibir detalhes do pátio
@@ -93,12 +87,25 @@ public class PatioController {
         try {
             Patio patio = patioRepository.findById(id).orElseThrow();
             patioRepository.deleteById(id);
-            redirectAttributes.addFlashAttribute("successMessage", 
-                "Pátio '" + patio.getNome() + "' excluído com sucesso!");
+            addSuccessMessage(redirectAttributes, buildDeleteSuccessMessage(getEntityType(), patio.getNome()));
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("errorMessage", 
-                "Erro ao excluir pátio. Verifique se não há motos associadas.");
+            addErrorMessage(redirectAttributes, buildDeleteErrorMessage(getEntityType()));
         }
+        return getRedirectUrl();
+    }
+
+    @Override
+    protected String getEntityName() {
+        return "patio";
+    }
+
+    @Override
+    protected String getEntityType() {
+        return "Pátio";
+    }
+
+    @Override
+    protected String getRedirectUrl() {
         return "redirect:/patios";
     }
 }

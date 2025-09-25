@@ -11,26 +11,36 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/motos")
-public class MotoController {
+public class MotoController extends BaseController {
 
     @Autowired
     private MotoRepository motoRepository;
+    
+    @Autowired
+    private com.fiap.fleetzone.repository.PatioRepository patioRepository;
 
     @GetMapping
     public String listarMotos(Model model) {
-        java.util.List<Moto> motos = motoRepository.findAll();
+        List<Moto> motos = motoRepository.findAll();
         model.addAttribute("motos", motos);
         return "motos";
     }
 
     // Exibir formulário de nova moto
     @GetMapping("/novo")
-    public String novaMotoForm(Model model) {
-        model.addAttribute("moto", new Moto());
-        model.addAttribute("titulo", "Nova Moto");
-        model.addAttribute("action", "/motos/salvar");
+    public String novaMotoForm(@RequestParam(required = false) Long patioId, Model model) {
+        Moto moto = new Moto();
+        if (patioId != null) {
+            // Pre-selecionar o pátio se fornecido via parâmetro
+            patioRepository.findById(patioId).ifPresent(moto::setPatio);
+        }
+        prepareFormModel(model, moto, "Nova " + getEntityType(), "/motos/salvar");
+        // Adicionar lista de pátios para o formulário
+        model.addAttribute("patios", patioRepository.findAll());
         return "moto-form";
     }
 
@@ -40,24 +50,20 @@ public class MotoController {
                             BindingResult result, 
                             Model model, 
                             RedirectAttributes redirectAttributes) {
-        if (result.hasErrors()) {
-            model.addAttribute("titulo", "Nova Moto");
-            model.addAttribute("action", "/motos/salvar");
+        if (hasValidationErrors(result, model, "Nova " + getEntityType(), "/motos/salvar")) {
             return "moto-form";
         }
         
         motoRepository.save(moto);
-        redirectAttributes.addFlashAttribute("successMessage", "Moto cadastrada com sucesso!");
-        return "redirect:/motos";
+        addSuccessMessage(redirectAttributes, buildCreateSuccessMessage(getEntityType(), moto.getModelo()));
+        return getRedirectUrl();
     }
 
     // Exibir formulário de edição
     @GetMapping("/editar/{id}")
     public String editarMotoForm(@PathVariable Long id, Model model) {
         Moto moto = motoRepository.findById(id).orElseThrow();
-        model.addAttribute("moto", moto);
-        model.addAttribute("titulo", "Editar Moto");
-        model.addAttribute("action", "/motos/atualizar/" + id);
+        prepareEditFormModel(model, moto, "Editar " + getEntityType(), "/motos/atualizar/" + id);
         return "moto-form";
     }
 
@@ -68,16 +74,14 @@ public class MotoController {
                                BindingResult result, 
                                Model model, 
                                RedirectAttributes redirectAttributes) {
-        if (result.hasErrors()) {
-            model.addAttribute("titulo", "Editar Moto");
-            model.addAttribute("action", "/motos/atualizar/" + id);
+        if (hasValidationErrors(result, model, "Editar " + getEntityType(), "/motos/atualizar/" + id)) {
             return "moto-form";
         }
         
         moto.setId(id);
         motoRepository.save(moto);
-        redirectAttributes.addFlashAttribute("successMessage", "Moto atualizada com sucesso!");
-        return "redirect:/motos";
+        addSuccessMessage(redirectAttributes, buildUpdateSuccessMessage(getEntityType(), moto.getModelo()));
+        return getRedirectUrl();
     }
 
     // Exibir detalhes da moto
@@ -88,24 +92,18 @@ public class MotoController {
         return "moto-detalhes";
     }
 
-    // Listar motos disponíveis
     @GetMapping("/disponveis")
     public String motosDisponiveis(Model model) {
-        // Assumindo que há um campo status na Moto
-        // List<Moto> motos = motoRepository.findByStatus("DISPONIVEL");
-        java.util.List<Moto> motos = motoRepository.findAll(); // Por enquanto, todas as motos
+        List<Moto> motos = motoRepository.findByStatus("DISPONIVEL");
         model.addAttribute("motos", motos);
         model.addAttribute("titulo", "Motos Disponíveis");
         model.addAttribute("filtro", "disponivel");
         return "motos";
     }
 
-    // Listar motos em manutenção
     @GetMapping("/manutencao")
     public String motosManutencao(Model model) {
-        // Assumindo que há um campo status na Moto
-        // List<Moto> motos = motoRepository.findByStatus("MANUTENCAO");
-        java.util.List<Moto> motos = motoRepository.findAll(); // Por enquanto, todas as motos
+        List<Moto> motos = motoRepository.findByStatus("MANUTENCAO");
         model.addAttribute("motos", motos);
         model.addAttribute("titulo", "Motos em Manutenção");
         model.addAttribute("filtro", "manutencao");
@@ -118,12 +116,26 @@ public class MotoController {
         try {
             Moto moto = motoRepository.findById(id).orElseThrow();
             motoRepository.deleteById(id);
-            redirectAttributes.addFlashAttribute("successMessage", 
-                "Moto '" + moto.getModelo() + "' (Placa: " + moto.getPlaca() + ") excluída com sucesso!");
+            addSuccessMessage(redirectAttributes, 
+                buildDeleteSuccessMessage(getEntityType(), moto.getModelo() + " (Placa: " + moto.getPlaca() + ")"));
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("errorMessage", 
-                "Erro ao excluir moto. Tente novamente.");
+            addErrorMessage(redirectAttributes, buildDeleteErrorMessage(getEntityType()));
         }
+        return getRedirectUrl();
+    }
+
+    @Override
+    protected String getEntityName() {
+        return "moto";
+    }
+
+    @Override
+    protected String getEntityType() {
+        return "Moto";
+    }
+
+    @Override
+    protected String getRedirectUrl() {
         return "redirect:/motos";
     }
 }

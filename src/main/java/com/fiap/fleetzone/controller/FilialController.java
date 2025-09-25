@@ -12,9 +12,11 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/filiais")
-public class FilialController {
+public class FilialController extends BaseController {
 
     @Autowired
     private FilialRepository filialRepository;
@@ -27,7 +29,7 @@ public class FilialController {
 
     @GetMapping
     public String listarFiliais(Model model) {
-        java.util.List<Filial> filiais = filialRepository.findAll();
+        List<Filial> filiais = filialRepository.findAll();
         
         // Estatísticas para o dashboard
         long totalFiliais = filialRepository.count();
@@ -47,9 +49,7 @@ public class FilialController {
     // Exibir formulário de nova filial
     @GetMapping("/novo")
     public String novaFilialForm(Model model) {
-        model.addAttribute("filial", new Filial());
-        model.addAttribute("titulo", "Nova Filial");
-        model.addAttribute("action", "/filiais/salvar");
+        prepareFormModel(model, new Filial(), "Nova " + getEntityType(), "/filiais/salvar");
         return "filial-form";
     }
 
@@ -59,15 +59,13 @@ public class FilialController {
                                BindingResult result, 
                                Model model, 
                                RedirectAttributes redirectAttributes) {
-        if (result.hasErrors()) {
-            model.addAttribute("titulo", "Nova Filial");
-            model.addAttribute("action", "/filiais/salvar");
+        if (hasValidationErrors(result, model, "Nova " + getEntityType(), "/filiais/salvar")) {
             return "filial-form";
         }
         
         filialRepository.save(filial);
-        redirectAttributes.addFlashAttribute("successMessage", "Filial cadastrada com sucesso!");
-        return "redirect:/filiais";
+        addSuccessMessage(redirectAttributes, buildCreateSuccessMessage(getEntityType(), filial.getNome()));
+        return getRedirectUrl();
     }
 
     // Exibir detalhes da filial
@@ -82,9 +80,7 @@ public class FilialController {
     @GetMapping("/editar/{id}")
     public String editarFilialForm(@PathVariable Long id, Model model) {
         Filial filial = filialRepository.findById(id).orElseThrow();
-        model.addAttribute("filial", filial);
-        model.addAttribute("titulo", "Editar Filial");
-        model.addAttribute("action", "/filiais/atualizar/" + id);
+        prepareEditFormModel(model, filial, "Editar " + getEntityType(), "/filiais/atualizar/" + id);
         return "filial-form";
     }
 
@@ -95,16 +91,14 @@ public class FilialController {
                                  BindingResult result, 
                                  Model model, 
                                  RedirectAttributes redirectAttributes) {
-        if (result.hasErrors()) {
-            model.addAttribute("titulo", "Editar Filial");
-            model.addAttribute("action", "/filiais/atualizar/" + id);
+        if (hasValidationErrors(result, model, "Editar " + getEntityType(), "/filiais/atualizar/" + id)) {
             return "filial-form";
         }
         
         filial.setId(id);
         filialRepository.save(filial);
-        redirectAttributes.addFlashAttribute("successMessage", "Filial atualizada com sucesso!");
-        return "redirect:/filiais";
+        addSuccessMessage(redirectAttributes, buildUpdateSuccessMessage(getEntityType(), filial.getNome()));
+        return getRedirectUrl();
     }
 
     // Excluir filial
@@ -113,12 +107,25 @@ public class FilialController {
         try {
             Filial filial = filialRepository.findById(id).orElseThrow();
             filialRepository.deleteById(id);
-            redirectAttributes.addFlashAttribute("successMessage", 
-                "Filial '" + filial.getNome() + "' excluída com sucesso!");
+            addSuccessMessage(redirectAttributes, buildDeleteSuccessMessage(getEntityType(), filial.getNome()));
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("errorMessage", 
-                "Erro ao excluir filial. Verifique se não há pátios associados.");
+            addErrorMessage(redirectAttributes, buildDeleteErrorMessage(getEntityType()));
         }
+        return getRedirectUrl();
+    }
+
+    @Override
+    protected String getEntityName() {
+        return "filial";
+    }
+
+    @Override
+    protected String getEntityType() {
+        return "Filial";
+    }
+
+    @Override
+    protected String getRedirectUrl() {
         return "redirect:/filiais";
     }
 }
