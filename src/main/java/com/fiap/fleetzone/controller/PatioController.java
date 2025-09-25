@@ -2,10 +2,13 @@ package com.fiap.fleetzone.controller;
 
 import com.fiap.fleetzone.model.Patio;
 import com.fiap.fleetzone.repository.PatioRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/patios")
@@ -32,8 +35,18 @@ public class PatioController {
 
     // Salvar novo pátio
     @PostMapping("/salvar")
-    public String salvarPatio(@ModelAttribute("patio") Patio patio) {
+    public String salvarPatio(@Valid @ModelAttribute("patio") Patio patio, 
+                              BindingResult result, 
+                              Model model, 
+                              RedirectAttributes redirectAttributes) {
+        if (result.hasErrors()) {
+            model.addAttribute("titulo", "Novo Pátio");
+            model.addAttribute("action", "/patios/salvar");
+            return "patio-form";
+        }
+        
         patioRepository.save(patio);
+        redirectAttributes.addFlashAttribute("successMessage", "Pátio cadastrado com sucesso!");
         return "redirect:/patios";
     }
 
@@ -49,9 +62,20 @@ public class PatioController {
 
     // Atualizar pátio
     @PostMapping("/atualizar/{id}")
-    public String atualizarPatio(@PathVariable Long id, @ModelAttribute("patio") Patio patio) {
+    public String atualizarPatio(@PathVariable Long id, 
+                                @Valid @ModelAttribute("patio") Patio patio, 
+                                BindingResult result, 
+                                Model model, 
+                                RedirectAttributes redirectAttributes) {
+        if (result.hasErrors()) {
+            model.addAttribute("titulo", "Editar Pátio");
+            model.addAttribute("action", "/patios/atualizar/" + id);
+            return "patio-form";
+        }
+        
         patio.setId(id);
         patioRepository.save(patio);
+        redirectAttributes.addFlashAttribute("successMessage", "Pátio atualizado com sucesso!");
         return "redirect:/patios";
     }
 
@@ -65,8 +89,16 @@ public class PatioController {
 
     // Excluir pátio
     @GetMapping("/excluir/{id}")
-    public String excluirPatio(@PathVariable Long id) {
-        patioRepository.deleteById(id);
+    public String excluirPatio(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        try {
+            Patio patio = patioRepository.findById(id).orElseThrow();
+            patioRepository.deleteById(id);
+            redirectAttributes.addFlashAttribute("successMessage", 
+                "Pátio '" + patio.getNome() + "' excluído com sucesso!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", 
+                "Erro ao excluir pátio. Verifique se não há motos associadas.");
+        }
         return "redirect:/patios";
     }
 }

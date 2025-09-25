@@ -3,10 +3,13 @@ package com.fiap.fleetzone.controller;
 
 import com.fiap.fleetzone.model.Moto;
 import com.fiap.fleetzone.repository.MotoRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/motos")
@@ -33,8 +36,18 @@ public class MotoController {
 
     // Salvar nova moto
     @PostMapping("/salvar")
-    public String salvarMoto(@ModelAttribute("moto") Moto moto) {
+    public String salvarMoto(@Valid @ModelAttribute("moto") Moto moto, 
+                            BindingResult result, 
+                            Model model, 
+                            RedirectAttributes redirectAttributes) {
+        if (result.hasErrors()) {
+            model.addAttribute("titulo", "Nova Moto");
+            model.addAttribute("action", "/motos/salvar");
+            return "moto-form";
+        }
+        
         motoRepository.save(moto);
+        redirectAttributes.addFlashAttribute("successMessage", "Moto cadastrada com sucesso!");
         return "redirect:/motos";
     }
 
@@ -50,9 +63,20 @@ public class MotoController {
 
     // Atualizar moto
     @PostMapping("/atualizar/{id}")
-    public String atualizarMoto(@PathVariable Long id, @ModelAttribute("moto") Moto moto) {
+    public String atualizarMoto(@PathVariable Long id, 
+                               @Valid @ModelAttribute("moto") Moto moto, 
+                               BindingResult result, 
+                               Model model, 
+                               RedirectAttributes redirectAttributes) {
+        if (result.hasErrors()) {
+            model.addAttribute("titulo", "Editar Moto");
+            model.addAttribute("action", "/motos/atualizar/" + id);
+            return "moto-form";
+        }
+        
         moto.setId(id);
         motoRepository.save(moto);
+        redirectAttributes.addFlashAttribute("successMessage", "Moto atualizada com sucesso!");
         return "redirect:/motos";
     }
 
@@ -90,8 +114,16 @@ public class MotoController {
 
     // Excluir moto
     @GetMapping("/excluir/{id}")
-    public String excluirMoto(@PathVariable Long id) {
-        motoRepository.deleteById(id);
+    public String excluirMoto(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        try {
+            Moto moto = motoRepository.findById(id).orElseThrow();
+            motoRepository.deleteById(id);
+            redirectAttributes.addFlashAttribute("successMessage", 
+                "Moto '" + moto.getModelo() + "' (Placa: " + moto.getPlaca() + ") excluída com sucesso!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", 
+                "Erro ao excluir moto. Tente novamente.");
+        }
         return "redirect:/motos";
     }
 }
