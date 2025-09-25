@@ -8,7 +8,6 @@ com\fiap\fleetzone\repository\PatioRepository.class
 com\fiap\fleetzone\dto\AuthDTOs$AuthLoginRequest.class
 com\fiap\fleetzone\dto\MotoDTO.class
 com\fiap\fleetzone\controller\UserController.class
-com\fiap\fleetzone\controller\AuthController.class
 com\fiap\fleetzone\dto\AuthDTOs$AuthRegisterRequest.class
 com\fiap\fleetzone\controller\FilialController.class
 com\fiap\fleetzone\dto\AuthDTOs.class

@@ -15,12 +15,16 @@ C:\Users\migue\Downloads\java\FleetZone_JAVA\src\main\java\com\fiap\fleetzone\re
 C:\Users\migue\Downloads\java\FleetZone_JAVA\src\main\java\com\fiap\fleetzone\dto\AuthDTOs.java
 C:\Users\migue\Downloads\java\FleetZone_JAVA\src\main\java\com\fiap\fleetzone\controller\PatioRestController.java
 C:\Users\migue\Downloads\java\FleetZone_JAVA\src\main\java\com\fiap\fleetzone\dto\PatioRelatorioDTO.java
+C:\Users\migue\Downloads\java\FleetZone_JAVA\src\main\java\com\fiap\fleetzone\model\Role.java
+C:\Users\migue\Downloads\java\FleetZone_JAVA\src\main\java\com\fiap\fleetzone\controller\LoginController.java
 C:\Users\migue\Downloads\java\FleetZone_JAVA\src\main\java\com\fiap\fleetzone\repository\UserRepository.java
 C:\Users\migue\Downloads\java\FleetZone_JAVA\src\main\java\com\fiap\fleetzone\security\TokenService.java
 C:\Users\migue\Downloads\java\FleetZone_JAVA\src\main\java\com\fiap\fleetzone\security\SecurityConfig.java
 C:\Users\migue\Downloads\java\FleetZone_JAVA\src\main\java\com\fiap\fleetzone\controller\MotoController.java
+C:\Users\migue\Downloads\java\FleetZone_JAVA\src\main\java\com\fiap\fleetzone\security\CustomUserDetailsService.java
 C:\Users\migue\Downloads\java\FleetZone_JAVA\src\main\java\com\fiap\fleetzone\model\User.java
 C:\Users\migue\Downloads\java\FleetZone_JAVA\src\main\java\com\fiap\fleetzone\controller\PatioController.java
 C:\Users\migue\Downloads\java\FleetZone_JAVA\src\main\java\com\fiap\fleetzone\controller\FilialController.java
 C:\Users\migue\Downloads\java\FleetZone_JAVA\src\main\java\com\fiap\fleetzone\controller\UserController.java
+C:\Users\migue\Downloads\java\FleetZone_JAVA\src\main\java\com\fiap\fleetzone\config\DataLoader.java
 C:\Users\migue\Downloads\java\FleetZone_JAVA\src\main\java\com\fiap\fleetzone\FleetZoneApplication.java
