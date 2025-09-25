@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -329,7 +329,8 @@
                                 <button type="button" 
                                         class="btn btn-delete btn-action"
                                         title="Excluir"
-                                        th:onclick="'confirmDelete(\'/filiais/excluir/' + ${filial.id} + '\', \'a filial ' + ${filial.nome} + '\')'">
+                                        th:onclick="'confirmDelete(\'/filiais/excluir/' + ${filial.id} + '\', \'a filial ' + ${filial.nome} + '\')'"
+                                        sec:authorize="hasRole('ADMIN')">
                                     <i class="fas fa-trash"></i>
                                 </button>
                             </td>

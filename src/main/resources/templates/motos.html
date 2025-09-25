@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -498,7 +498,8 @@
                                         <a th:href="@{/motos/excluir/{id}(id=${moto.id})}" 
                                            class="btn-action btn-delete"
                                            title="Excluir moto"
-                                           onclick="return confirm('Tem certeza que deseja excluir esta moto?')">
+                                           onclick="return confirm('Tem certeza que deseja excluir esta moto?')"
+                                           sec:authorize="hasRole('ADMIN')">
                                             <i class="fas fa-trash"></i>
                                             Excluir
                                         </a>
