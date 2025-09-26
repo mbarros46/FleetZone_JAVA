@@ -6,10 +6,12 @@ import com.fiap.fleetzone.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.ApplicationContext;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
+@Order(2) // Executa após o Flyway (que tem order default = 1)
 public class DataLoader implements CommandLineRunner {
 
     @Autowired
