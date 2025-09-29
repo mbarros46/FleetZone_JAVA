@@ -26,11 +26,11 @@ public class DataLoader implements CommandLineRunner {
         PasswordEncoder passwordEncoder = applicationContext.getBean(PasswordEncoder.class);
         System.out.println(" PasswordEncoder obtido: " + passwordEncoder.getClass().getSimpleName());
         
-        // Criar usuário administrador se não existir
+        // Garantir que o administrador padrão exista e esteja com a senha/perfil corretos
         System.out.println(" Verificando se admin@fleetzone.com existe...");
         boolean adminExists = userRepository.existsByEmail("admin@fleetzone.com");
         System.out.println(" Admin existe? " + adminExists);
-        
+
         if (!adminExists) {
             User admin = new User();
             admin.setNome("Administrador do Sistema");
@@ -39,6 +39,22 @@ public class DataLoader implements CommandLineRunner {
             admin.setRole(Role.ROLE_ADMIN);
             userRepository.save(admin);
             System.out.println("✅ Usuário administrador criado: admin@fleetzone.com / admin123");
+        } else {
+            // Caso tenha sido criado via migração com outra senha (ex: "password"), alinhar para "admin123"
+            userRepository.findByEmail("admin@fleetzone.com").ifPresent(existingAdmin -> {
+                boolean senhaCorreta = passwordEncoder.matches("admin123", existingAdmin.getPasswordHash());
+                boolean roleCorreta = existingAdmin.getRole() == Role.ROLE_ADMIN;
+                if (!senhaCorreta || !roleCorreta) {
+                    if (!senhaCorreta) {
+                        existingAdmin.setPasswordHash(passwordEncoder.encode("admin123"));
+                    }
+                    if (!roleCorreta) {
+                        existingAdmin.setRole(Role.ROLE_ADMIN);
+                    }
+                    userRepository.save(existingAdmin);
+                    System.out.println("✅ Usuário administrador atualizado (senha/role corrigidos)");
+                }
+            });
         }
 
         // Criar usuário comum se não existir
