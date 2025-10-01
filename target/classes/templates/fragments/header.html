@@ -70,12 +70,18 @@
                             <span th:text="${#authentication != null ? #authentication.name : 'Usuário'}">Usuário</span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                            <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Perfil</a></li>
-                            <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Configurações</a></li>
+                            <li><a class="dropdown-item" th:href="@{/perfil}"><i class="fas fa-user me-2"></i>Perfil</a></li>
+                            <li><a class="dropdown-item" th:href="@{/configuracoes}"><i class="fas fa-cog me-2"></i>Configurações</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" th:href="@{/swagger-ui.html}" target="_blank"><i class="fas fa-code me-2"></i>API Docs</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt me-2"></i>Sair</a></li>
+                            <li>
+                                <form th:action="@{/logout}" method="post" style="display: inline;">
+                                    <button type="submit" class="dropdown-item" style="background: none; border: none; text-align: left; width: 100%;">
+                                        <i class="fas fa-sign-out-alt me-2"></i>Sair
+                                    </button>
+                                </form>
+                            </li>
                         </ul>
                     </li>
                 </ul>
