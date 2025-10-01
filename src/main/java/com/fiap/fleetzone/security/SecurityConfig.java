@@ -50,9 +50,10 @@ public class SecurityConfig {
                 .requestMatchers(
                     "/api/auth/**",
                     "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html",
-                    "/h2-console/**"
+                    "/h2-console/**",
+                    "/login", "/css/**", "/js/**", "/images/**"
                 ).permitAll()
-                .anyRequest().permitAll()
+                .anyRequest().authenticated()
             )
             .formLogin(form -> form
                 .loginPage("/login")
