@@ -60,24 +60,37 @@ com.fiap.fleetzone
 
 ## 🔧 Como Executar o Projeto
 
-### 1. Clonar o repositório
+> 📖 **[GUIA COMPLETO DETALHADO](./COMO_EXECUTAR.md)** - Instruções passo a passo com solução de problemas
+
+### ⚡ Execução Rápida
 
 ```bash
+# 1. Clonar o repositório
 git clone https://github.com/mbarros46/FleetZone_JAVA.git
 cd FleetZone_JAVA
-```
 
-### 2. Executar com Maven
-
+# 2. Verificar se Porta 8081 está Livre
 ```bash
+# 3. No Windows (PowerShell)
+netstat -ano | findstr :8081
+
+# 4. Executar (Windows)
+./run-dev.bat
+
+# 4. Ou executar com Maven
 mvn spring-boot:run
 ```
 
-### 3. Acessar a aplicação
+### 🌐 Acessar a Aplicação
 
 - **URL Principal:** `http://localhost:8081/`
-- **Tela de Login:** `http://localhost:8081/login`
+- **Login:** `admin@fleetzone.com` / `admin123`
 - **Console H2:** `http://localhost:8081/h2-console`
+
+### 📋 Pré-requisitos
+- ☑️ **Java 17+**
+- ☑️ **Maven 3.6+** 
+- ☑️ **Porta 8081** livre
 
 ---
 
