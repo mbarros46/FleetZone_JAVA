@@ -183,7 +183,6 @@ spring.jpa.hibernate.ddl-auto=validate
 
 Sistema pronto para produção, atendendo todos os requisitos solicitados para a aplicação web da Mottu com Spring Boot, Thymeleaf, Flyway e Spring Security.
 
-**Data de Conclusão:** 25/09/2025
 
 - Recomendado usar banco Oracle ativo.
 - Opcional: adaptar para H2 para testes locais rápidos.
@@ -193,7 +192,7 @@ Sistema pronto para produção, atendendo todos os requisitos solicitados para a
 
 ## 👨‍💻 Desenvolvido por
 
-- Miguel Barros Ramos (RM556652)
-- Pedro Valentim Merise (RM556826)
-- Thomas Rodrigues (558042)
+- Miguel Barros Ramos RM556652
+- Pedro Valentim Merise RM556826
+- Thomas Rodrigues 558042
 
