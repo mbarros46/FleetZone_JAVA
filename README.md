@@ -87,6 +87,32 @@ mvn spring-boot:run
 - **Login:** `admin@fleetzone.com` / `admin123`
 - **Console H2:** `http://localhost:8081/h2-console`
 
+## 🔁 Perfis e Deploy (Produção)
+
+Para rodar em produção com banco em nuvem, use o perfil `prod`:
+
+Exportar variáveis de ambiente esperadas: DB_HOST, DB_PORT, DB_NAME, DB_USER, DB_PASS, JWT_SECRET
+
+Exemplo (PowerShell):
+
+```powershell
+$env:DB_HOST="db.example.com";
+$env:DB_PORT="5432";
+$env:DB_NAME="fleetzone";
+$env:DB_USER="appuser";
+$env:DB_PASS="s3cret";
+$env:JWT_SECRET="change-me";
+mvn spring-boot:run -Dspring-boot.run.profiles=prod
+```
+
+Endpoints úteis no deploy:
+- Swagger UI: /swagger-ui/index.html
+- Actuator health: /actuator/health
+
+Credenciais demo (produção)
+- Email: admin@fleetzone.com
+- Senha: admin123
+
 ### 📋 Pré-requisitos
 - ☑️ **Java 17+**
 - ☑️ **Maven 3.6+** 
@@ -187,6 +213,11 @@ Sistema pronto para produção, atendendo todos os requisitos solicitados para a
 - Recomendado usar banco Oracle ativo.
 - Opcional: adaptar para H2 para testes locais rápidos.
 - Swagger pode ser acessado em `/swagger-ui.html` após iniciar o projeto.
+
+Links importantes no deploy (preencha após deploy):
+- URL do App: (https://...)
+- URL do Swagger: (https://.../swagger-ui/index.html)
+- URL do Actuator Health: (https://.../actuator/health)
 
 ---
 
