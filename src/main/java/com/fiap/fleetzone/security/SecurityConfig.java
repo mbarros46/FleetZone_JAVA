@@ -45,7 +45,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(csrf -> csrf.disable())
+            // CSRF protection enabled (use default configuration)
             .authorizeHttpRequests(authz -> authz
                 .requestMatchers(
                     "/api/auth/**",
@@ -68,10 +68,7 @@ public class SecurityConfig {
                 .deleteCookies("JSESSIONID")
                 .permitAll()
             )
-            .sessionManagement(session -> session
-                .maximumSessions(1)
-                .maxSessionsPreventsLogin(false)
-            )
+            // Do not limit concurrent sessions (allow multiple sessions per user)
             .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.sameOrigin()))
             .cors(cors -> {});
 

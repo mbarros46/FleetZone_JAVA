@@ -2,8 +2,8 @@ package com.fiap.fleetzone.controller;
 
 import com.fiap.fleetzone.dto.MotoDTO;
 import com.fiap.fleetzone.model.Moto;
-import com.fiap.fleetzone.repository.MotoRepository;
-import com.fiap.fleetzone.repository.PatioRepository;
+import com.fiap.fleetzone.service.MotoService;
+import com.fiap.fleetzone.service.PatioService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -23,11 +23,11 @@ import java.util.Optional;
 @Tag(name = "Motos", description = "API para gestão de motocicletas")
 public class MotoRestController {
 
-    @Autowired
-    private MotoRepository motoRepository;
+        @Autowired
+        private MotoService motoService;
 
-    @Autowired
-    private PatioRepository patioRepository;
+        @Autowired
+        private PatioService patioService;
 
     @Operation(summary = "Listar todas as motos", description = "Retorna uma lista com todas as motocicletas cadastradas")
     @ApiResponses(value = {
@@ -35,7 +35,7 @@ public class MotoRestController {
     })
     @GetMapping
     public ResponseEntity<List<MotoDTO>> listar() {
-        List<Moto> motos = motoRepository.findAll();
+        List<Moto> motos = motoService.listar();
         List<MotoDTO> motoDTOs = motos.stream()
                 .map(MotoDTO::new)
                 .toList();
@@ -51,7 +51,7 @@ public class MotoRestController {
     public ResponseEntity<MotoDTO> buscar(
             @Parameter(description = "ID da moto", example = "1")
             @PathVariable Long id) {
-        Optional<Moto> moto = motoRepository.findById(id);
+        Optional<Moto> moto = motoService.listar().stream().filter(m -> m.getId().equals(id)).findFirst();
         return moto.map(value -> ResponseEntity.ok(new MotoDTO(value)))
                    .orElseGet(() -> ResponseEntity.notFound().build());
     }
@@ -70,7 +70,7 @@ public class MotoRestController {
         moto.setPlaca(motoDTO.getPlaca());
         moto.setStatus(motoDTO.getStatus());
 
-        Moto salvo = motoRepository.save(moto);
+        Moto salvo = motoService.salvar(moto);
         return ResponseEntity.created(URI.create("/api/motos/" + salvo.getId())).body(new MotoDTO(salvo));
     }
 
@@ -86,7 +86,7 @@ public class MotoRestController {
             @PathVariable Long id,
             @Parameter(description = "Novos dados da moto")
             @RequestBody @Valid MotoDTO motoDTO) {
-        Optional<Moto> existente = motoRepository.findById(id);
+        Optional<Moto> existente = motoService.listar().stream().filter(m -> m.getId().equals(id)).findFirst();
         if (existente.isEmpty()) return ResponseEntity.notFound().build();
 
         Moto moto = existente.get();
@@ -94,7 +94,7 @@ public class MotoRestController {
         moto.setPlaca(motoDTO.getPlaca());
         moto.setStatus(motoDTO.getStatus());
 
-        Moto atualizado = motoRepository.save(moto);
+        Moto atualizado = motoService.salvar(moto);
         return ResponseEntity.ok(new MotoDTO(atualizado));
     }
 
@@ -109,8 +109,8 @@ public class MotoRestController {
             @PathVariable Long id,
             @Parameter(description = "ID do pátio de destino", example = "2")
             @RequestParam Long patioId) {
-        Optional<Moto> motoOpt = motoRepository.findById(id);
-        Optional<com.fiap.fleetzone.model.Patio> patioOpt = patioRepository.findById(patioId);
+        Optional<Moto> motoOpt = motoService.listar().stream().filter(m -> m.getId().equals(id)).findFirst();
+        Optional<com.fiap.fleetzone.model.Patio> patioOpt = patioService.listar().stream().filter(p -> p.getId().equals(patioId)).findFirst();
         
         if (motoOpt.isEmpty() || patioOpt.isEmpty()) {
             return ResponseEntity.notFound().build();
@@ -118,7 +118,7 @@ public class MotoRestController {
         
         Moto moto = motoOpt.get();
         moto.setPatio(patioOpt.get());
-        Moto atualizado = motoRepository.save(moto);
+        Moto atualizado = motoService.salvar(moto);
         return ResponseEntity.ok(new MotoDTO(atualizado));
     }
 
@@ -131,8 +131,8 @@ public class MotoRestController {
     public ResponseEntity<Void> remover(
             @Parameter(description = "ID da moto", example = "1")
             @PathVariable Long id) {
-        if (!motoRepository.existsById(id)) return ResponseEntity.notFound().build();
-        motoRepository.deleteById(id);
+                if (motoService.listar().stream().noneMatch(m -> m.getId().equals(id))) return ResponseEntity.notFound().build();
+                motoService.excluir(id);
         return ResponseEntity.noContent().build();
     }
 }

@@ -2,7 +2,6 @@
 package com.fiap.fleetzone.controller;
 
 import com.fiap.fleetzone.model.Moto;
-import com.fiap.fleetzone.repository.MotoRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,14 +17,14 @@ import java.util.List;
 public class MotoController extends BaseController {
 
     @Autowired
-    private MotoRepository motoRepository;
-    
+    private com.fiap.fleetzone.service.MotoService motoService;
+
     @Autowired
-    private com.fiap.fleetzone.repository.PatioRepository patioRepository;
+    private com.fiap.fleetzone.service.PatioService patioService;
 
     @GetMapping
     public String listarMotos(Model model) {
-        List<Moto> motos = motoRepository.findAll();
+        List<Moto> motos = motoService.listar();
         model.addAttribute("motos", motos);
         return "motos";
     }
@@ -34,13 +33,10 @@ public class MotoController extends BaseController {
     @GetMapping("/novo")
     public String novaMotoForm(@RequestParam(required = false) Long patioId, Model model) {
         Moto moto = new Moto();
-        if (patioId != null) {
-            // Pre-selecionar o pátio se fornecido via parâmetro
-            patioRepository.findById(patioId).ifPresent(moto::setPatio);
-        }
+        if (patioId != null) patioService.listar().stream().filter(p -> p.getId().equals(patioId)).findFirst().ifPresent(moto::setPatio);
         prepareFormModel(model, moto, "Nova " + getEntityType(), "/motos/salvar");
         // Adicionar lista de pátios para o formulário
-        model.addAttribute("patios", patioRepository.findAll());
+        model.addAttribute("patios", patioService.listar());
         return "moto-form";
     }
 
@@ -54,7 +50,7 @@ public class MotoController extends BaseController {
             return "moto-form";
         }
         
-        motoRepository.save(moto);
+        motoService.salvar(moto);
         addSuccessMessage(redirectAttributes, buildCreateSuccessMessage(getEntityType(), moto.getModelo()));
         return getRedirectUrl();
     }
@@ -62,7 +58,7 @@ public class MotoController extends BaseController {
     // Exibir formulário de edição
     @GetMapping("/editar/{id}")
     public String editarMotoForm(@PathVariable Long id, Model model) {
-        Moto moto = motoRepository.findById(id).orElseThrow();
+        Moto moto = motoService.listar().stream().filter(m -> m.getId().equals(id)).findFirst().orElseThrow();
         prepareEditFormModel(model, moto, "Editar " + getEntityType(), "/motos/atualizar/" + id);
         return "moto-form";
     }
@@ -79,7 +75,7 @@ public class MotoController extends BaseController {
         }
         
         moto.setId(id);
-        motoRepository.save(moto);
+        motoService.salvar(moto);
         addSuccessMessage(redirectAttributes, buildUpdateSuccessMessage(getEntityType(), moto.getModelo()));
         return getRedirectUrl();
     }
@@ -87,14 +83,14 @@ public class MotoController extends BaseController {
     // Exibir detalhes da moto
     @GetMapping("/{id}")
     public String detalhesMoto(@PathVariable Long id, Model model) {
-        Moto moto = motoRepository.findById(id).orElseThrow();
+        Moto moto = motoService.listar().stream().filter(m -> m.getId().equals(id)).findFirst().orElseThrow();
         model.addAttribute("moto", moto);
         return "moto-detalhes";
     }
 
     @GetMapping("/disponveis")
     public String motosDisponiveis(Model model) {
-        List<Moto> motos = motoRepository.findByStatus("DISPONIVEL");
+        List<Moto> motos = motoService.listarPorStatus("DISPONIVEL");
         model.addAttribute("motos", motos);
         model.addAttribute("titulo", "Motos Disponíveis");
         model.addAttribute("filtro", "disponivel");
@@ -103,7 +99,7 @@ public class MotoController extends BaseController {
 
     @GetMapping("/manutencao")
     public String motosManutencao(Model model) {
-        List<Moto> motos = motoRepository.findByStatus("MANUTENCAO");
+        List<Moto> motos = motoService.listarPorStatus("MANUTENCAO");
         model.addAttribute("motos", motos);
         model.addAttribute("titulo", "Motos em Manutenção");
         model.addAttribute("filtro", "manutencao");
@@ -114,8 +110,8 @@ public class MotoController extends BaseController {
     @GetMapping("/excluir/{id}")
     public String excluirMoto(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         try {
-            Moto moto = motoRepository.findById(id).orElseThrow();
-            motoRepository.deleteById(id);
+            Moto moto = motoService.listar().stream().filter(m -> m.getId().equals(id)).findFirst().orElseThrow();
+            motoService.excluir(id);
             addSuccessMessage(redirectAttributes, 
                 buildDeleteSuccessMessage(getEntityType(), moto.getModelo() + " (Placa: " + moto.getPlaca() + ")"));
         } catch (Exception e) {

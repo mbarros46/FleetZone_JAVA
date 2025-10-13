@@ -1,67 +1,42 @@
 package com.fiap.fleetzone.controller;
 
+// ...existing code...
 import com.fiap.fleetzone.dto.AuthDTOs.AuthLoginRequest;
 import com.fiap.fleetzone.dto.AuthDTOs.AuthRegisterRequest;
 import com.fiap.fleetzone.dto.AuthDTOs.AuthResponse;
-import com.fiap.fleetzone.model.User;
-import com.fiap.fleetzone.repository.UserRepository;
-import com.fiap.fleetzone.security.TokenService;
+import com.fiap.fleetzone.service.AuthService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
-
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
 
-    private final UserRepository users;
-    private final PasswordEncoder encoder;
-    private final TokenService tokens;
+    private final AuthService auth;
 
-    public AuthController(UserRepository users, PasswordEncoder encoder, TokenService tokens) {
-        this.users = users;
-        this.encoder = encoder;
-        this.tokens = tokens;
+    public AuthController(AuthService auth) {
+        this.auth = auth;
     }
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody AuthRegisterRequest body) {
-        if (body == null || isBlank(body.nome) || isBlank(body.email) || isBlank(body.senha)) {
-            return ResponseEntity.badRequest().body("Campos obrigatórios: nome, email, senha");
+        try {
+            AuthResponse resp = auth.register(body);
+            return ResponseEntity.status(201).body(resp);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(409).body(e.getMessage());
         }
-        String email = body.email.toLowerCase().trim();
-
-        if (users.existsByEmail(email)) {
-            return ResponseEntity.status(409).body("E-mail já cadastrado");
-        }
-
-        User u = new User();
-        u.setNome(body.nome.trim());
-        u.setEmail(email);
-        u.setPasswordHash(encoder.encode(body.senha));
-
-        users.save(u);
-
-        String jwt = tokens.generate(u);
-        return ResponseEntity.status(201).body(
-                new AuthResponse(jwt, "Bearer", tokens.getExpirationMillis(), u.getId(), u.getNome(), u.getEmail())
-        );
     }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody AuthLoginRequest body) {
-        if (body == null || isBlank(body.email) || isBlank(body.senha)) {
-            return ResponseEntity.badRequest().body("Campos obrigatórios: email, senha");
+        try {
+            AuthResponse resp = auth.login(body);
+            return ResponseEntity.ok(resp);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(401).body(e.getMessage());
         }
-        return users.findByEmail(body.email.toLowerCase().trim())
-                .filter(u -> encoder.matches(body.senha, u.getPasswordHash()))
-                .<ResponseEntity<?>>map(u -> ResponseEntity.ok(
-                        new AuthResponse(tokens.generate(u), "Bearer", tokens.getExpirationMillis(),
-                                u.getId(), u.getNome(), u.getEmail())
-                ))
-                .orElseGet(() -> ResponseEntity.status(401).body("Credenciais inválidas"));
     }
-
-    private static boolean isBlank(String s) { return s == null || s.trim().isEmpty(); }
 }

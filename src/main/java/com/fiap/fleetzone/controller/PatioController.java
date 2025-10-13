@@ -1,7 +1,6 @@
 package com.fiap.fleetzone.controller;
 
 import com.fiap.fleetzone.model.Patio;
-import com.fiap.fleetzone.repository.PatioRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,11 +16,11 @@ import java.util.List;
 public class PatioController extends BaseController {
 
     @Autowired
-    private PatioRepository patioRepository;
+    private com.fiap.fleetzone.service.PatioService patioService;
 
     @GetMapping
     public String listarPatios(Model model) {
-        List<Patio> patios = patioRepository.findAll();
+    List<Patio> patios = patioService.listar();
         model.addAttribute("patios", patios);
         return "patios";
     }
@@ -43,7 +42,7 @@ public class PatioController extends BaseController {
             return "patio-form";
         }
         
-        patioRepository.save(patio);
+    patioService.salvar(patio);
         addSuccessMessage(redirectAttributes, buildCreateSuccessMessage(getEntityType(), patio.getNome()));
         return getRedirectUrl();
     }
@@ -51,7 +50,7 @@ public class PatioController extends BaseController {
     // Exibir formulário de edição
     @GetMapping("/editar/{id}")
     public String editarPatioForm(@PathVariable Long id, Model model) {
-        Patio patio = patioRepository.findById(id).orElseThrow();
+    Patio patio = patioService.listar().stream().filter(p -> p.getId().equals(id)).findFirst().orElseThrow();
         prepareEditFormModel(model, patio, "Editar " + getEntityType(), "/patios/atualizar/" + id);
         return "patio-form";
     }
@@ -67,8 +66,8 @@ public class PatioController extends BaseController {
             return "patio-form";
         }
         
-        patio.setId(id);
-        patioRepository.save(patio);
+    patio.setId(id);
+    patioService.salvar(patio);
         addSuccessMessage(redirectAttributes, buildUpdateSuccessMessage(getEntityType(), patio.getNome()));
         return getRedirectUrl();
     }
@@ -76,7 +75,7 @@ public class PatioController extends BaseController {
     // Exibir detalhes do pátio
     @GetMapping("/{id}")
     public String detalhesPatio(@PathVariable Long id, Model model) {
-        Patio patio = patioRepository.findById(id).orElseThrow();
+        Patio patio = patioService.listar().stream().filter(p -> p.getId().equals(id)).findFirst().orElseThrow();
         model.addAttribute("patio", patio);
         return "patio-detalhes";
     }
@@ -85,8 +84,8 @@ public class PatioController extends BaseController {
     @GetMapping("/excluir/{id}")
     public String excluirPatio(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         try {
-            Patio patio = patioRepository.findById(id).orElseThrow();
-            patioRepository.deleteById(id);
+            Patio patio = patioService.listar().stream().filter(p -> p.getId().equals(id)).findFirst().orElseThrow();
+            patioService.excluir(id);
             addSuccessMessage(redirectAttributes, buildDeleteSuccessMessage(getEntityType(), patio.getNome()));
         } catch (Exception e) {
             addErrorMessage(redirectAttributes, buildDeleteErrorMessage(getEntityType()));
