@@ -36,6 +36,7 @@
                     <li class="divider"></li>
                     <li>
                         <form th:action="@{/logout}" method="post" style="display: inline;">
+                            <div th:replace="~{fragments/_csrf_input :: _csrf_input}"></div>
                             <button type="submit" class="logout-btn">
                                 <i class="fas fa-sign-out-alt"></i> Sair
                             </button>

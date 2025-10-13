@@ -216,6 +216,8 @@
         <!-- Form Card -->
         <div class="form-card">
             <form th:action="${action ?: '/filiais/salvar'}" th:object="${filial}" method="post" novalidate>
+                <div th:replace="~{fragments/_csrf_input :: _csrf_input}"></div>
+                <div th:replace="~{fragments/messages :: validationErrors}"></div>
                 <input type="hidden" th:field="*{id}" th:if="${filial.id != null}">
                 
                 <!-- Dados Básicos -->
