@@ -27,18 +27,18 @@ else
     echo "✅ Maven encontrado"
 fi
 
-# Verificar se porta 8081 está livre
-echo "⏳ Verificando porta 8081..."
-if lsof -i :8081 &> /dev/null; then
-    echo "⚠️  Porta 8081 está em uso!"
+# Verificar se porta 8085 está livre
+echo "⏳ Verificando porta 8085..."
+if lsof -i :8085 &> /dev/null; then
+    echo "⚠️  Porta 8085 está em uso!"
     echo "🔧 Tentando liberar a porta..."
-    PID=$(lsof -t -i :8081)
+    PID=$(lsof -t -i :8085)
     if [ ! -z "$PID" ]; then
         kill -9 $PID
-        echo "✅ Porta 8081 liberada"
+        echo "✅ Porta 8085 liberada"
     fi
 else
-    echo "✅ Porta 8081 disponível"
+    echo "✅ Porta 8085 disponível"
 fi
 
 echo
@@ -53,9 +53,9 @@ export SPRING_PROFILES_ACTIVE=dev
 echo "🚀 Executando aplicação..."
 echo
 echo "➡️  A aplicação estará disponível em:"
-echo "    💻 http://localhost:8081"
+echo "    💻 http://localhost:8085"
 echo "    🔑 Login: admin@fleetzone.com / admin123"
-echo "    🗄️  H2 Console: http://localhost:8081/h2-console"
+echo "    🗄️  H2 Console: http://localhost:8085/h2-console"
 echo
 echo "⏹️  Para parar: Ctrl + C"
 echo

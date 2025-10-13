@@ -148,11 +148,13 @@
     
     <script>
         function editarPerfil() {
-            alert('Funcionalidade de edição de perfil será implementada em breve!');
+            const profileMsg = document.getElementById('profile-msg');
+            if (profileMsg) { profileMsg.innerText = 'Edição de perfil: disponível em breve.'; profileMsg.classList.remove('d-none'); }
         }
         
         function alterarSenha() {
-            alert('Funcionalidade de alteração de senha será implementada em breve!');
+            const profileMsg = document.getElementById('profile-msg');
+            if (profileMsg) { profileMsg.innerText = 'Alteração de senha: disponível em breve.'; profileMsg.classList.remove('d-none'); }
         }
     </script>
 </body>

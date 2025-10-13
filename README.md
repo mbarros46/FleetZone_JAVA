@@ -58,34 +58,31 @@ com.fiap.fleetzone
 
 ---
 
-## 🔧 Como Executar o Projeto
+## 🔧 Como Executar o Projeto (resumo)
 
-> 📖 **[GUIA COMPLETO DETALHADO](./COMO_EXECUTAR.md)** - Instruções passo a passo com solução de problemas
+As instruções essenciais para executar localmente estão aqui — não há arquivo separado `COMO_EXECUTAR.md`.
 
 ### ⚡ Execução Rápida
 
-```bash
+```powershell
 # 1. Clonar o repositório
 git clone https://github.com/mbarros46/FleetZone_JAVA.git
 cd FleetZone_JAVA
 
-# 2. Verificar se Porta 8081 está Livre
-```bash
-# 3. No Windows (PowerShell)
-netstat -ano | findstr :8081
+# 2. Verificar se Porta 8085 está livre (PowerShell)
+netstat -ano | findstr :8085
 
-# 4. Executar (Windows)
-./run-dev.bat
-
-# 4. Ou executar com Maven
+# 3. Executar no Windows (script fornecido) ou com Maven
+.\run-dev.bat
+# ou
 mvn spring-boot:run
 ```
 
-### 🌐 Acessar a Aplicação
+### 🌐 Acessar a Aplicação (local)
 
-- **URL Principal:** `http://localhost:8081/`
+- **URL Principal:** `http://localhost:8085/`
 - **Login:** `admin@fleetzone.com` / `admin123`
-- **Console H2:** `http://localhost:8081/h2-console`
+- **Console H2:** `http://localhost:8085/h2-console`
 
 ## 🔁 Perfis e Deploy (Produção)
 
@@ -116,7 +113,22 @@ Credenciais demo (produção)
 ### 📋 Pré-requisitos
 - ☑️ **Java 17+**
 - ☑️ **Maven 3.6+** 
-- ☑️ **Porta 8081** livre
+ - ☑️ **Porta 8085** livre
+
+## 🧭 Narrativa curta (para apresentação)
+
+O FleetZone é uma solução para gestão de frotas de motocicletas para a Mottu. Centraliza cadastro de filiais, pátios e motos, permitindo operações como transferência de motos entre pátios, geração de relatórios sobre disponibilidade e controles de acesso por perfil (ADMIN/USER). A escolha de Spring Boot + Thymeleaf priorizou integração server-side segura com velocidade de desenvolvimento. Flyway garante versionamento do esquema do banco e facilita migração entre H2 (dev) e Oracle (prod).
+
+## 📚 Evidências e arquivos importantes no repositório
+
+- Migrações Flyway: `src/main/resources/db/migration/` (V1..V6 + pasta h2)
+- Script Oracle de criação: `oracle-script.sql`
+- Templates e fragmentos: `src/main/resources/templates/` (fragments, forms, login)
+- Configuração e porta local: `src/main/resources/application.properties` (server.port=8085)
+- Segurança e configuração: `src/main/java/com/fiap/fleetzone/security/SecurityConfig.java`
+- Código-fonte organizacional: `src/main/java/com/fiap/fleetzone/` (controllers → services → repositories)
+
+> Recomendo criar uma pasta `docs/` com canvas/protótipos e incluir o link no README antes da avaliação (opcional, pode ser feito depois).
 
 ---
 

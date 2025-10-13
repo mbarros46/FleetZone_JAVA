@@ -234,17 +234,21 @@
     
     <script>
         function alterarSenha() {
-            alert('Funcionalidade de alteração de senha será implementada em breve!');
+            // Mostrar mensagem discreta em vez de alerta intrusivo
+            const msgElem = document.getElementById('config-msg');
+            if (msgElem) { msgElem.innerText = 'Funcionalidade de alteração de senha: em breve.'; msgElem.classList.remove('d-none'); }
         }
         
         function toggleDarkMode() {
             const darkMode = document.getElementById('darkMode').checked;
             if (darkMode) {
                 document.body.classList.add('dark-theme');
-                alert('Modo escuro ativado! Esta funcionalidade será implementada completamente em breve.');
+                const msgElem = document.getElementById('config-msg');
+                if (msgElem) { msgElem.innerText = 'Modo escuro: ativado (apenas visual).'; msgElem.classList.remove('d-none'); }
             } else {
                 document.body.classList.remove('dark-theme');
-                alert('Modo escuro desativado!');
+                const msgElem = document.getElementById('config-msg');
+                if (msgElem) { msgElem.innerText = 'Modo escuro: desativado.'; msgElem.classList.remove('d-none'); }
             }
         }
         
@@ -289,7 +293,8 @@
                 document.getElementById('privateProfile').checked = false;
                 document.getElementById('activityHistory').checked = true;
                 
-                alert('Configurações restauradas para os valores padrão!');
+                const msgElem = document.getElementById('config-msg');
+                if (msgElem) { msgElem.innerText = 'Configurações restauradas para os valores padrão.'; msgElem.classList.remove('d-none'); }
             }
         }
     </script>

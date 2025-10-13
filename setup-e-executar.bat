@@ -29,18 +29,18 @@ if %errorlevel% neq 0 (
     echo ✅ Maven encontrado
 )
 
-REM Verificar se porta 8081 está livre
-echo ⏳ Verificando porta 8081...
-netstat -ano | findstr :8081 > nul 2>&1
+REM Verificar se porta 8085 está livre
+echo ⏳ Verificando porta 8085...
+netstat -ano | findstr :8085 > nul 2>&1
 if %errorlevel% equ 0 (
-    echo ⚠️  Porta 8081 esta em uso!
+    echo ⚠️  Porta 8085 esta em uso!
     echo 🔧 Tentando liberar a porta...
-    for /f "tokens=5" %%a in ('netstat -ano ^| findstr :8081') do (
+    for /f "tokens=5" %%a in ('netstat -ano ^| findstr :8085') do (
         taskkill /PID %%a /F > nul 2>&1
     )
-    echo ✅ Porta 8081 liberada
-) else (
-    echo ✅ Porta 8081 disponivel
+    echo ✅ Porta 8085 liberada
+ ) else (
+    echo ✅ Porta 8085 disponivel
 )
 
 echo.
@@ -54,9 +54,9 @@ set SPRING_PROFILES_ACTIVE=dev
 echo 🚀 Executando aplicacao...
 echo.
 echo ➡️  A aplicacao estara disponivel em:
-echo    💻 http://localhost:8081
+echo    💻 http://localhost:8085
 echo    🔑 Login: admin@fleetzone.com / admin123
-echo    🗄️  H2 Console: http://localhost:8081/h2-console
+echo    🗄️  H2 Console: http://localhost:8085/h2-console
 echo.
 echo ⏹️  Para parar: Ctrl + C
 echo.
