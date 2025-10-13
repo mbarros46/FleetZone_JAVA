@@ -177,6 +177,7 @@
             <div class="col-lg-8">
                 <div class="content-card">
                     <form th:action="@{/operacoes/transferir-moto}" method="post" id="transferForm">
+                        <div th:replace="~{fragments/_csrf_input :: _csrf_input}"></div>
                         <!-- Pátio de Origem -->
                         <div class="form-group">
                             <label for="patioOrigemId" class="form-label">

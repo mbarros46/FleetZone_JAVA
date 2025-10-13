@@ -162,6 +162,7 @@
 
         <!-- Formulário de Login -->
         <form th:action="@{/login}" method="post">
+            <div th:replace="~{fragments/_csrf_input :: _csrf_input}"></div>
             <div class="form-floating">
                 <input type="email" class="form-control" id="username" name="username" placeholder="email@exemplo.com" required>
                 <label for="username"><i class="fas fa-envelope me-2"></i>Email</label>
