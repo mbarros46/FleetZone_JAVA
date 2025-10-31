@@ -31,6 +31,7 @@ com\fiap\fleetzone\controller\PerfilController.class
 com\fiap\fleetzone\dto\AuthDTOs$Usuario.class
 com\fiap\fleetzone\service\UserService.class
 com\fiap\fleetzone\model\Filial.class
+com\fiap\fleetzone\util\PasswordHashGenerator.class
 com\fiap\fleetzone\controller\PatioController.class
 com\fiap\fleetzone\controller\OperacaoController.class
 com\fiap\fleetzone\model\Role.class

@@ -45,10 +45,10 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            // CSRF protection enabled (use default configuration)
-            .authorizeHttpRequests(authz -> authz
+            // CSRF protection enabled (use default configuration)            .authorizeHttpRequests(authz -> authz
                 .requestMatchers(
                     "/api/auth/**",
+                    "/debug/**",
                     "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html",
                     "/h2-console/**",
                     "/login", "/css/**", "/js/**", "/images/**"
