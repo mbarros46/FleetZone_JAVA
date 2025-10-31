@@ -1,4 +1,3 @@
-
 # 🚀 FleetZone - Aplicação Web Completa
 
 > **Aplicação Web Full-Stack** desenvolvida com **Spring Boot** para gerenciamento de motos, pátios e filiais da Mottu. Projeto implementado com **100% dos requisitos** solicitados.
@@ -198,6 +197,52 @@ spring.jpa.hibernate.ddl-auto=validate
 
 ### 🔧 Desenvolvimento
 - `GET /h2-console` → Console do banco H2
+
+---
+
+## 📡 Integração IoT (Internet of Things)
+
+Este projeto inclui uma integração simples para receber e armazenar dados vindos de dispositivos IoT (sensores / gateways) que reportam movimentações de motos nos pátios.
+
+Principais pontos:
+
+- Tabela do banco: `moto_movimento` (registrando placa, pátio, endereço, timestamp e tipo de movimento)
+- Script de criação: `oracle-iot-script.sql` (cria a tabela, índices e insere dados de exemplo)
+- Entidade JPA: `MotoMovimento` (`src/main/java/com/fiap/fleetzone/model/MotoMovimento.java`)
+- Serviço de integração: `IoTIntegrationService` — processa, vincula à `Moto`/`Patio` e persiste
+- Endpoints REST para integração e consulta (controller `IoTController`):
+  - POST `/api/iot/movimento` — Recebe um JSON com os dados IoT e registra um movimento
+  - POST `/api/iot/simular` — Simula dados via query params (usar no frontend de teste)
+  - GET  `/api/iot/recentes` — Movimentos das últimas 24 horas
+  - GET  `/api/iot/historico/{placa}` — Histórico por placa
+  - GET  `/api/iot/patio/{patioId}` — Movimentos de um pátio
+  - GET  `/api/iot/ultimo/{placa}` — Último movimento de uma moto
+
+Exemplo de payload JSON esperado (POST /api/iot/movimento):
+
+```json
+{
+  "placa": "ABC1D23",
+  "patioId": 3,
+  "endereco": "Pátio da Paulista",
+  "data": "2025-10-30T20:07:17"
+}
+```
+
+Exemplo de envio via curl:
+
+```bash
+curl -X POST http://localhost:8085/api/iot/movimento \
+  -H "Content-Type: application/json" \
+  -d '{"placa":"ABC1D23","patioId":3,"endereco":"Pátio da Paulista","data":"2025-10-30T20:07:17"}'
+```
+
+Página de monitoramento (frontend): `GET /iot/monitoring` — interface em `src/main/resources/templates/iot-monitoring.html` que consome `/api/iot/recentes` e permite simular entradas.
+
+Observações:
+- Antes de usar, execute `oracle-iot-script.sql` no Oracle (usuário RM556652) para criar a tabela `moto_movimento` e índices.
+- O serviço tentará associar o movimento à entidade `Moto` existente (pela placa). Se a moto existir, o pátio da moto será atualizado quando necessário.
+- Tipos de movimento suportados: `ENTRADA`, `SAIDA`, `TRANSFERENCIA`.
 
 ---
 

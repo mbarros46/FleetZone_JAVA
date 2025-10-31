@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transferir Moto entre Pátios - FleetZone</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .main-container {
+            margin-top: 20px;
+            margin-bottom: 40px;
+        }
+        .page-header {
+            background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 32px rgba(23, 162, 184, 0.2);
+        }
+        .page-title {
+            color: white;
+            font-weight: 700;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .page-title i {
+            color: #fff;
+            font-size: 2.5rem;
+        }
+        .content-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            margin-bottom: 2rem;
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        .form-label {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+        .form-control, .form-select {
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+            padding: 0.75rem 1rem;
+            transition: all 0.3s ease;
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: #17a2b8;
+            box-shadow: 0 0 0 0.2rem rgba(23, 162, 184, 0.25);
+        }
+        .is-invalid {
+            border-color: #dc3545;
+        }
+        .invalid-feedback {
+            display: block;
+            color: #dc3545;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+        .btn {
+            border-radius: 10px;
+            padding: 0.75rem 2rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+            border: none;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(23, 162, 184, 0.3);
+        }
+        .btn-secondary {
+            background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
+            border: none;
+        }
+        .breadcrumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+        .breadcrumb-item a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .breadcrumb-item a:hover {
+            color: white;
+        }
+        .breadcrumb-item.active {
+            color: white;
+        }
+        .info-card {
+            background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+            color: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .info-card h5 {
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+        .info-card ul {
+            margin-bottom: 0;
+            padding-left: 1.5rem;
+        }
+        .info-card li {
+            margin-bottom: 0.5rem;
+        }
+        .moto-info {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+            display: none;
+        }
+        .moto-info.show {
+            display: block;
+        }
+        .text-muted {
+            color: #6c757d !important;
+        }
+        .required {
+            color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div th:replace="~{fragments/header :: header}"></div>
+
+    <div class="container main-container">
+        <div class="page-header">
+            <!-- Breadcrumb -->
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a th:href="@{/}"><i class="fas fa-home me-1"></i>Início</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="#"><i class="fas fa-cogs me-1"></i>Operações</a>
+                    </li>
+                    <li class="breadcrumb-item active">Transferir Moto</li>
+                </ol>
+            </nav>
+            
+            <h1 class="page-title">
+                <i class="fas fa-exchange-alt"></i>
+                Transferir Moto entre Pátios
+            </h1>
+            <p class="mb-0 mt-2 opacity-75">Mova uma motocicleta de um pátio para outro de forma segura</p>
+        </div>
+
+        <!-- Messages -->
+        <div th:replace="~{fragments/messages :: messages}"></div>
+
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="content-card">
+                    <form th:action="@{/operacoes/transferir-moto}" method="post" id="transferForm">
+                        <div th:replace="~{fragments/_csrf_input :: _csrf_input}"></div>
+                        <!-- Pátio de Origem -->
+                        <div class="form-group">
+                            <label for="patioOrigemId" class="form-label">
+                                <i class="fas fa-map-marker-alt me-2"></i>
+                                Pátio de Origem <span class="required">*</span>
+                            </label>
+                            <select class="form-select" id="patioOrigemId" name="patioOrigemId" required>
+                                <option value="">Selecione o pátio de origem</option>
+                                <option th:each="patio : ${patios}" 
+                                        th:value="${patio.id}" 
+                                        th:text="${patio.nome + ' - ' + (patio.localizacao ?: 'Localização não informada')}">
+                                    Pátio
+                                </option>
+                            </select>
+                            <div class="invalid-feedback" id="patioOrigemError"></div>
+                        </div>
+
+                        <!-- Moto -->
+                        <div class="form-group">
+                            <label for="motoId" class="form-label">
+                                <i class="fas fa-motorcycle me-2"></i>
+                                Moto a ser transferida <span class="required">*</span>
+                            </label>
+                            <select class="form-select" id="motoId" name="motoId" required disabled>
+                                <option value="">Primeiro selecione o pátio de origem</option>
+                            </select>
+                            <div class="invalid-feedback" id="motoError"></div>
+                            
+                            <!-- Informações da moto selecionada -->
+                            <div class="moto-info" id="motoInfo">
+                                <h6><i class="fas fa-info-circle me-2"></i>Informações da Moto</h6>
+                                <p id="motoDetails" class="mb-0"></p>
+                            </div>
+                        </div>
+
+                        <!-- Pátio de Destino -->
+                        <div class="form-group">
+                            <label for="patioDestinoId" class="form-label">
+                                <i class="fas fa-map-marker-alt me-2"></i>
+                                Pátio de Destino <span class="required">*</span>
+                            </label>
+                            <select class="form-select" id="patioDestinoId" name="patioDestinoId" required>
+                                <option value="">Selecione o pátio de destino</option>
+                                <option th:each="patio : ${patios}" 
+                                        th:value="${patio.id}" 
+                                        th:text="${patio.nome + ' - ' + (patio.localizacao ?: 'Localização não informada')}">
+                                    Pátio
+                                </option>
+                            </select>
+                            <div class="invalid-feedback" id="patioDestinoError"></div>
+                        </div>
+
+                        <!-- Observações -->
+                        <div class="form-group">
+                            <label for="observacoes" class="form-label">
+                                <i class="fas fa-sticky-note me-2"></i>
+                                Observações
+                            </label>
+                            <textarea class="form-control" id="observacoes" name="observacoes" 
+                                      rows="3" placeholder="Motivo da transferência, condições especiais, etc."></textarea>
+                            <small class="form-text text-muted">Campo opcional para registrar informações adicionais sobre a transferência</small>
+                        </div>
+
+                        <!-- Botões -->
+                        <div class="d-flex gap-3 justify-content-end">
+                            <a th:href="@{/}" class="btn btn-secondary">
+                                <i class="fas fa-times me-2"></i>Cancelar
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-exchange-alt me-2"></i>Transferir Moto
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <!-- Informações Importantes -->
+                <div class="info-card">
+                    <h5><i class="fas fa-info-circle me-2"></i>Informações Importantes</h5>
+                    <ul>
+                        <li>Apenas motos disponíveis ou em manutenção podem ser transferidas</li>
+                        <li>Motos alugadas não podem ser movidas entre pátios</li>
+                        <li>A transferência será registrada no sistema</li>
+                        <li>Todos os campos marcados com * são obrigatórios</li>
+                    </ul>
+                </div>
+
+                <!-- Estatísticas Rápidas -->
+                <div class="content-card">
+                    <h5><i class="fas fa-chart-bar me-2"></i>Estatísticas</h5>
+                    <div class="row text-center">
+                        <div class="col-6">
+                            <div class="border rounded p-3">
+                                <h6 class="text-primary" th:text="${#lists.size(patios)}">0</h6>
+                                <small class="text-muted">Pátios</small>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="border rounded p-3">
+                                <h6 class="text-info" th:text="${#lists.size(motos)}">0</h6>
+                                <small class="text-muted">Motos</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ações Rápidas -->
+                <div class="content-card">
+                    <h5><i class="fas fa-bolt me-2"></i>Ações Rápidas</h5>
+                    <div class="d-grid gap-2">
+                        <a th:href="@{/relatorios/motos-por-patio}" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-chart-bar me-2"></i>Ver Distribuição
+                        </a>
+                        <a th:href="@{/motos}" class="btn btn-outline-secondary btn-sm">
+                            <i class="fas fa-motorcycle me-2"></i>Gerenciar Motos
+                        </a>
+                        <a th:href="@{/patios}" class="btn btn-outline-secondary btn-sm">
+                            <i class="fas fa-map-marker-alt me-2"></i>Gerenciar Pátios
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div th:replace="~{fragments/footer :: footer}"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Carrega motos quando o pátio de origem é selecionado
+        document.getElementById('patioOrigemId').addEventListener('change', function() {
+            const patioId = this.value;
+            const motoSelect = document.getElementById('motoId');
+            const motoInfo = document.getElementById('motoInfo');
+            
+            // Reset moto selection
+            motoSelect.innerHTML = '<option value="">Carregando motos...</option>';
+            motoSelect.disabled = true;
+            motoInfo.classList.remove('show');
+            
+            if (patioId) {
+                // Fazer requisição AJAX para buscar motos do pátio
+                fetch(`/operacoes/api/motos-por-patio/${patioId}`)
+                    .then(response => response.json())
+                    .then(motos => {
+                        motoSelect.innerHTML = '<option value="">Selecione uma moto</option>';
+                        
+                        if (motos.length === 0) {
+                            motoSelect.innerHTML = '<option value="">Nenhuma moto disponível neste pátio</option>';
+                        } else {
+                            motos.forEach(moto => {
+                                const option = document.createElement('option');
+                                option.value = moto.id;
+                                option.textContent = `${moto.modelo} - ${moto.placa} (${moto.status})`;
+                                option.dataset.moto = JSON.stringify(moto);
+                                motoSelect.appendChild(option);
+                            });
+                        }
+                        
+                        motoSelect.disabled = false;
+                    })
+                    .catch(error => {
+                        console.error('Erro ao carregar motos:', error);
+                        motoSelect.innerHTML = '<option value="">Erro ao carregar motos</option>';
+                    });
+            } else {
+                motoSelect.innerHTML = '<option value="">Primeiro selecione o pátio de origem</option>';
+            }
+        });
+
+        // Exibe informações da moto selecionada
+        document.getElementById('motoId').addEventListener('change', function() {
+            const selectedOption = this.options[this.selectedIndex];
+            const motoInfo = document.getElementById('motoInfo');
+            const motoDetails = document.getElementById('motoDetails');
+            
+            if (this.value && selectedOption.dataset.moto) {
+                const moto = JSON.parse(selectedOption.dataset.moto);
+                motoDetails.innerHTML = `
+                    <strong>Modelo:</strong> ${moto.modelo}<br>
+                    <strong>Placa:</strong> ${moto.placa}<br>
+                    <strong>Status:</strong> <span class="badge bg-${getStatusBadgeClass(moto.status)}">${moto.status}</span><br>
+                    ${moto.ano ? `<strong>Ano:</strong> ${moto.ano}` : ''}
+                `;
+                motoInfo.classList.add('show');
+            } else {
+                motoInfo.classList.remove('show');
+            }
+        });
+
+        // Helper function para classes do badge de status
+        function getStatusBadgeClass(status) {
+            switch(status) {
+                case 'DISPONIVEL': return 'success';
+                case 'ALUGADA': return 'danger';
+                case 'MANUTENCAO': return 'warning';
+                default: return 'secondary';
+            }
+        }
+
+        // Validação do formulário
+        document.getElementById('transferForm').addEventListener('submit', function(e) {
+            const patioOrigem = document.getElementById('patioOrigemId').value;
+            const patioDestino = document.getElementById('patioDestinoId').value;
+            const moto = document.getElementById('motoId').value;
+            
+            let hasError = false;
+            
+            // Reset previous errors
+            document.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
+            document.querySelectorAll('.invalid-feedback').forEach(el => el.textContent = '');
+            
+            if (!patioOrigem) {
+                document.getElementById('patioOrigemId').classList.add('is-invalid');
+                document.getElementById('patioOrigemError').textContent = 'Selecione o pátio de origem';
+                hasError = true;
+            }
+            
+            if (!moto) {
+                document.getElementById('motoId').classList.add('is-invalid');
+                document.getElementById('motoError').textContent = 'Selecione uma moto';
+                hasError = true;
+            }
+            
+            if (!patioDestino) {
+                document.getElementById('patioDestinoId').classList.add('is-invalid');
+                document.getElementById('patioDestinoError').textContent = 'Selecione o pátio de destino';
+                hasError = true;
+            }
+            
+            if (patioOrigem && patioDestino && patioOrigem === patioDestino) {
+                document.getElementById('patioDestinoId').classList.add('is-invalid');
+                document.getElementById('patioDestinoError').textContent = 'O pátio de destino deve ser diferente do pátio de origem';
+                hasError = true;
+            }
+            
+            if (hasError) {
+                e.preventDefault();
+            }
+        });
+    </script>
+</body>
+</html>

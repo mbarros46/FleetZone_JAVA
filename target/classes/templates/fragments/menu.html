@@ -1,0 +1,55 @@
+<!-- Fragmento: Menu -->
+<div th:fragment="menu" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <nav>        <ul>
+            <li><a th:href="@{/motos}">Motos</a></li>
+            <li><a th:href="@{/patios}">Pátios</a></li>
+            <li><a th:href="@{/filiais}">Filiais</a></li>
+            <li><a th:href="@{/iot/monitoring}"><i class="fas fa-satellite-dish"></i> IoT Monitoring</a></li>
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle">Relatórios</a>
+                <ul class="dropdown-menu">
+                    <li><a th:href="@{/relatorios/motos-por-patio}">Motos por Pátio</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle">Operações</a>
+                <ul class="dropdown-menu">
+                    <li><a th:href="@{/operacoes/transferir-moto}">Transferir Moto</a></li>
+                </ul>
+            </li>
+            <!-- Menu do usuário -->
+            <li class="dropdown user-menu" sec:authorize="isAuthenticated()">
+                <a href="#" class="dropdown-toggle">
+                    <i class="fas fa-user-circle"></i>
+                    <span sec:authentication="name"></span>
+                    <span class="badge" sec:authorize="hasRole('ADMIN')">ADMIN</span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li class="user-info">
+                        <div class="user-details">
+                            <strong sec:authentication="principal.nome"></strong><br>
+                            <small sec:authentication="name"></small><br>
+                            <span class="role-badge" sec:authorize="hasRole('ADMIN')">Administrador</span>
+                            <span class="role-badge" sec:authorize="hasRole('USER') and !hasRole('ADMIN')">Usuário</span>
+                        </div>
+                    </li>
+                    <li class="divider"></li>
+                    <li>
+                        <form th:action="@{/logout}" method="post" style="display: inline;">
+                            <div th:replace="~{fragments/_csrf_input :: _csrf_input}"></div>
+                            <button type="submit" class="logout-btn">
+                                <i class="fas fa-sign-out-alt"></i> Sair
+                            </button>
+                        </form>
+                    </li>
+                </ul>
+            </li>
+            <!-- Link de login para usuários não autenticados -->
+            <li sec:authorize="isAnonymous()">
+                <a th:href="@{/login}" class="login-link">
+                    <i class="fas fa-sign-in-alt"></i> Entrar
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>

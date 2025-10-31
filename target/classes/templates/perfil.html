@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${titulo}">Meu Perfil - FleetZone</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            min-height: 100vh;
+        }
+        .profile-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .profile-header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 3rem;
+        }
+        .profile-info {
+            padding: 2rem;
+        }
+        .info-item {
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+        }
+        .info-item:last-child {
+            border-bottom: none;
+        }
+        .info-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div th:replace="~{fragments/header :: header}"></div>
+
+    <div class="container mt-4">
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a th:href="@{/}" class="text-decoration-none">Início</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Meu Perfil</li>
+            </ol>
+        </nav>
+
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="profile-card">
+                    <!-- Profile Header -->
+                    <div class="profile-header">
+                        <div class="profile-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <h2 th:text="${nomeUsuario ?: 'Usuário'}">Nome do Usuário</h2>
+                        <p class="mb-0 opacity-75">Usuário do FleetZone</p>
+                    </div>
+
+                    <!-- Profile Information -->
+                    <div class="profile-info">
+                        <h5 class="mb-3"><i class="fas fa-info-circle me-2 text-primary"></i>Informações do Perfil</h5>
+                        
+                        <div class="info-item">
+                            <div class="info-icon bg-primary bg-opacity-10">
+                                <i class="fas fa-user text-primary"></i>
+                            </div>
+                            <div>
+                                <h6 class="mb-0">Nome de Usuário</h6>
+                                <small class="text-muted" th:text="${nomeUsuario ?: 'Não informado'}">Nome do usuário</small>
+                            </div>
+                        </div>
+
+                        <div class="info-item">
+                            <div class="info-icon bg-success bg-opacity-10">
+                                <i class="fas fa-envelope text-success"></i>
+                            </div>
+                            <div>
+                                <h6 class="mb-0">Email</h6>
+                                <small class="text-muted" th:text="${nomeUsuario ?: 'Não informado'}">email@exemplo.com</small>
+                            </div>
+                        </div>
+
+                        <div class="info-item">
+                            <div class="info-icon bg-warning bg-opacity-10">
+                                <i class="fas fa-shield-alt text-warning"></i>
+                            </div>
+                            <div>
+                                <h6 class="mb-0">Nível de Acesso</h6>
+                                <small class="text-muted">Usuário Padrão</small>
+                            </div>
+                        </div>
+
+                        <div class="info-item">
+                            <div class="info-icon bg-info bg-opacity-10">
+                                <i class="fas fa-calendar text-info"></i>
+                            </div>
+                            <div>
+                                <h6 class="mb-0">Último Acesso</h6>
+                                <small class="text-muted">Agora</small>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="mt-4 d-flex gap-2">
+                            <button type="button" class="btn btn-primary" onclick="editarPerfil()">
+                                <i class="fas fa-edit me-2"></i>Editar Perfil
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary" onclick="alterarSenha()">
+                                <i class="fas fa-lock me-2"></i>Alterar Senha
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div th:replace="~{fragments/footer :: footer}"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        function editarPerfil() {
+            const profileMsg = document.getElementById('profile-msg');
+            if (profileMsg) { profileMsg.innerText = 'Edição de perfil: disponível em breve.'; profileMsg.classList.remove('d-none'); }
+        }
+        
+        function alterarSenha() {
+            const profileMsg = document.getElementById('profile-msg');
+            if (profileMsg) { profileMsg.innerText = 'Alteração de senha: disponível em breve.'; profileMsg.classList.remove('d-none'); }
+        }
+    </script>
+</body>
+</html>

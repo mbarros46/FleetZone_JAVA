@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${titulo ?: 'Formulário de Pátio'} + ' - FleetZone'">Formulário de Pátio - FleetZone</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .main-container {
+            margin-top: 20px;
+            margin-bottom: 40px;
+        }
+        .page-header {
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 32px rgba(39, 174, 96, 0.2);
+        }
+        .page-title {
+            color: white;
+            font-weight: 700;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .page-title i {
+            color: #fff;
+            font-size: 2.5rem;
+        }
+        .form-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 2.5rem;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        .form-label {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .required {
+            color: #e74c3c;
+        }
+        .form-control {
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 0.75rem;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+        .form-control:focus {
+            border-color: #27ae60;
+            box-shadow: 0 0 0 0.2rem rgba(39, 174, 96, 0.25);
+        }
+        .input-group-text {
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+            color: white;
+            border: none;
+            border-radius: 10px 0 0 10px;
+        }
+        .input-group .form-control {
+            border-left: none;
+            border-radius: 0 10px 10px 0;
+        }
+        .input-group:focus-within .input-group-text {
+            background: linear-gradient(135deg, #219a52 0%, #27ae60 100%);
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+            border: none;
+            border-radius: 10px;
+            padding: 0.75rem 2rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #219a52 0%, #27ae60 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(39, 174, 96, 0.3);
+        }
+        .btn-secondary {
+            background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);
+            border: none;
+            border-radius: 10px;
+            padding: 0.75rem 2rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, #7f8c8d 0%, #6c7b7d 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(149, 165, 166, 0.3);
+        }
+        .section-title {
+            color: #2c3e50;
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #27ae60;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .section-title i {
+            color: #27ae60;
+            font-size: 1.4rem;
+        }
+        .help-text {
+            font-size: 0.875rem;
+            color: #6c757d;
+            margin-top: 0.25rem;
+        }
+        .invalid-feedback {
+            display: block;
+            color: #e74c3c;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+        .breadcrumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+        .breadcrumb-item a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .breadcrumb-item a:hover {
+            color: white;
+        }
+        .breadcrumb-item.active {
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div th:replace="~{fragments/header :: header}"></div>
+
+    <div class="container main-container">
+        <div class="page-header">
+            <!-- Breadcrumb -->
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a th:href="@{/}"><i class="fas fa-home me-1"></i>Início</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a th:href="@{/patios}"><i class="fas fa-warehouse me-1"></i>Pátios</a>
+                    </li>
+                    <li class="breadcrumb-item active" th:text="${titulo ?: 'Formulário'}">Formulário</li>
+                </ol>
+            </nav>
+            
+            <h1 class="page-title">
+                <i class="fas fa-warehouse"></i>
+                <span th:text="${titulo ?: 'Formulário de Pátio'}">Formulário de Pátio</span>
+            </h1>
+            <p class="mb-0 mt-2 opacity-75" th:text="${patio.id != null ? 'Edite as informações do pátio' : 'Preencha os dados para criar um novo pátio'}">
+                Preencha os dados do pátio
+            </p>
+        </div>
+
+        <!-- Messages -->
+        <div th:replace="~{fragments/messages :: messages}"></div>
+
+        <!-- Form Card -->
+        <div class="form-card">
+            <form th:action="${action ?: '/patios/salvar'}" th:object="${patio}" method="post" novalidate>
+                <div th:replace="~{fragments/_csrf_input :: _csrf_input}"></div>
+                <div th:replace="~{fragments/messages :: validationErrors}"></div>
+                <input type="hidden" th:field="*{id}" th:if="${patio.id != null}">
+                
+                <!-- Dados do Pátio -->
+                <div class="section-title">
+                    <i class="fas fa-warehouse"></i>
+                    Informações do Pátio
+                </div>
+                
+                <div class="row g-3">
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <label for="nome" class="form-label">
+                                <i class="fas fa-warehouse"></i>
+                                Nome do Pátio <span class="required">*</span>
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="fas fa-warehouse"></i>
+                                </span>
+                                <input type="text" 
+                                       id="nome" 
+                                       th:field="*{nome}"
+                                       class="form-control"
+                                       placeholder="Ex: Pátio Central"
+                                       maxlength="100"
+                                       required>
+                            </div>
+                            <div class="help-text">Nome do pátio (máx. 100 caracteres)</div>
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-3">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="localizacao" class="form-label">
+                                <i class="fas fa-map-marker-alt"></i>
+                                Localização
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                </span>
+                                <input type="text" 
+                                       id="localizacao" 
+                                       th:field="*{localizacao}"
+                                       class="form-control"
+                                       placeholder="Ex: São Paulo - SP, Rua das Flores, 123"
+                                       maxlength="200">
+                            </div>
+                            <div class="help-text">Endereço ou localização do pátio (máx. 200 caracteres)</div>
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('localizacao')}" th:errors="*{localizacao}"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Botões -->
+                <div class="d-flex justify-content-between align-items-center mt-4 pt-3" style="border-top: 1px solid #e9ecef;">
+                    <a th:href="@{/patios}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left me-2"></i>Cancelar
+                    </a>
+                    
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save me-2"></i>
+                        <span th:text="${patio.id != null ? 'Atualizar' : 'Salvar'}">Salvar</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div th:replace="~{fragments/footer :: footer}"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

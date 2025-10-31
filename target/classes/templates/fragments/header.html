@@ -1,0 +1,125 @@
+<!-- Fragmento: Cabeçalho -->
+<div th:fragment="header">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+        <div class="container-fluid">
+            <!-- Logo/Brand -->
+            <a class="navbar-brand d-flex align-items-center" th:href="@{/}">
+                <i class="fas fa-motorcycle me-2 text-primary" style="font-size: 1.5rem;"></i>
+                <span class="fw-bold text-dark" style="font-size: 1.3rem;">FleetZone</span>
+            </a>
+            
+            <!-- Mobile toggle -->
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <!-- Navigation -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link fw-semibold text-dark me-3 d-flex align-items-center" th:href="@{/}">
+                            <i class="fas fa-home me-2 text-info"></i>
+                            Início
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle fw-semibold text-dark me-3 d-flex align-items-center" 
+                           href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-building me-2 text-warning"></i>
+                            Filiais
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" th:href="@{/filiais}"><i class="fas fa-list me-2"></i>Listar Filiais</a></li>
+                            <li><a class="dropdown-item" th:href="@{/filiais/novo}"><i class="fas fa-plus me-2"></i>Nova Filial</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle fw-semibold text-dark me-3 d-flex align-items-center" 
+                           href="#" id="patiosDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-warehouse me-2 text-success"></i>
+                            Pátios
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="patiosDropdown">
+                            <li><a class="dropdown-item" th:href="@{/patios}"><i class="fas fa-list me-2"></i>Listar Pátios</a></li>
+                            <li><a class="dropdown-item" th:href="@{/patios/novo}"><i class="fas fa-plus me-2"></i>Novo Pátio</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle fw-semibold text-dark me-3 d-flex align-items-center" 
+                           href="#" id="motosDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-motorcycle me-2 text-primary"></i>
+                            Motos
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="motosDropdown">
+                            <li><a class="dropdown-item" th:href="@{/motos}"><i class="fas fa-list me-2"></i>Listar Motos</a></li>
+                            <li><a class="dropdown-item" th:href="@{/motos/novo}"><i class="fas fa-plus me-2"></i>Nova Moto</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" th:href="@{/motos/disponveis}"><i class="fas fa-check-circle me-2"></i>Disponíveis</a></li>
+                            <li><a class="dropdown-item" th:href="@{/motos/manutencao}"><i class="fas fa-wrench me-2"></i>Em Manutenção</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                
+                <!-- User Menu -->
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle fw-semibold text-dark d-flex align-items-center" 
+                           href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-user-circle me-2 text-secondary"></i>
+                            <span th:text="${#authentication != null ? #authentication.name : 'Usuário'}">Usuário</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" th:href="@{/perfil}"><i class="fas fa-user me-2"></i>Perfil</a></li>
+                            <li><a class="dropdown-item" th:href="@{/configuracoes}"><i class="fas fa-cog me-2"></i>Configurações</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" th:href="@{/swagger-ui/index.html}" target="_blank"><i class="fas fa-code me-2"></i>API Docs</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <form th:action="@{/logout}" method="post" style="display: inline;">
+                                    <button type="submit" class="dropdown-item" style="background: none; border: none; text-align: left; width: 100%;">
+                                        <i class="fas fa-sign-out-alt me-2"></i>Sair
+                                    </button>
+                                </form>
+                                        <div th:replace="~{fragments/_csrf_input :: _csrf_input}"></div>
+                                    <!-- CSRF token meta for AJAX clients -->
+                                    <meta name="_csrf_parameter" th:content="${_csrf.parameterName}" />
+                                    <meta name="_csrf_token" th:content="${_csrf.token}" />
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</div>
+
+<style>
+    .navbar {
+        border-bottom: 1px solid #e9ecef;
+    }
+    .navbar-brand {
+        transition: transform 0.3s ease;
+    }
+    .navbar-brand:hover {
+        transform: scale(1.05);
+    }
+    .nav-link {
+        border-radius: 8px;
+        padding: 0.5rem 1rem !important;
+        margin: 0 0.2rem;
+        transition: all 0.3s ease;
+    }
+    .nav-link:hover {
+        background-color: rgba(52, 58, 64, 0.1);
+        transform: translateY(-1px);
+    }
+    .nav-link i {
+        font-size: 1rem;
+    }
+    @media (max-width: 991px) {
+        .nav-link {
+            margin: 0.2rem 0;
+        }
+    }
+</style>
