@@ -112,22 +112,16 @@
         <!-- Flyway -->
         <dependency>
             <groupId>org.flywaydb</groupId>
-            <artifactId>flyway-core</artifactId>
-        </dependency>
+            <artifactId>flyway-core</artifactId>        </dependency>
 
-        <!-- H2 Database para desenvolvimento -->
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <scope>runtime</scope>
-        </dependency>
-
-        <!-- PostgreSQL driver (runtime para produção) -->
+        <!-- PostgreSQL driver (commented - keeping for future use) -->
+        <!--
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <scope>runtime</scope>
         </dependency>
+        -->
 
         <!-- JWT Dependencies -->
         <dependency>
