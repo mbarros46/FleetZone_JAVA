@@ -51,6 +51,13 @@
             <version>19.3.0.0</version>
         </dependency>
 
+        <!-- H2 database for development profile -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
         <!-- Bean Validation -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

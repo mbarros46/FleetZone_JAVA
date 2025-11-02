@@ -45,7 +45,8 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            // CSRF protection enabled (use default configuration)            .authorizeHttpRequests(authz -> authz
+            // CSRF protection enabled (use default configuration)
+            .authorizeHttpRequests(authz -> authz
                 .requestMatchers(
                     "/api/auth/**",
                     "/debug/**",
@@ -71,6 +72,9 @@ public class SecurityConfig {
             // Do not limit concurrent sessions (allow multiple sessions per user)
             .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.sameOrigin()))
             .cors(cors -> {});
+
+        // register DaoAuthenticationProvider explicitly to ensure our UserDetailsService and PasswordEncoder are used
+        http.authenticationProvider(authenticationProvider());
 
         return http.build();
     }

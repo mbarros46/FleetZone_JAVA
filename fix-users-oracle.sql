@@ -66,5 +66,5 @@ ORDER BY email;
 -- Email: admin@fleetzone.com | Senha: password
 -- Email: user@fleetzone.com  | Senha: password
 --
--- Nota: O hash $2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi
+-- Nota: O hash $2a$10$92IXUNpkjO0rOQ5**byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi
 -- corresponde à senha "password" em BCrypt
