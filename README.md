@@ -284,3 +284,46 @@ Links importantes no deploy (preencha após deploy):
 - Pedro Valentim Merise RM556826
 - Thomas Rodrigues 558042
 
+---
+
+## 📱 Integração Mobile (JWT)
+
+Para liberar o fluxo CRUD completo do app móvel recomendamos usar autenticação por JWT.
+
+1) Login
+- POST `/api/auth/login` com JSON: `{ "email": "<email>", "senha": "<senha>" }`.
+- Resposta contém `token` (JWT). Use esse token no header `Authorization: Bearer <token>` nas próximas requisições.
+
+2) Exemplo rápido (curl)
+```bash
+curl -X POST http://localhost:8085/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"admin@fleetzone.com","senha":"admin123"}'
+```
+
+3) Enviando token em requests
+```bash
+curl -H "Authorization: Bearer <TOKEN>" http://localhost:8085/api/motos
+```
+
+4) Alternativa de desenvolvimento (dev only)
+- Para testes locais rápidos você pode definir uma variável de ambiente `DEV_STATIC_TOKEN` e `DEV_STATIC_USER_EMAIL` ou colocar em `src/main/resources/application.properties` (APENAS em ambiente de desenvolvimento). Se o header `Authorization: Bearer <DEV_STATIC_TOKEN>` for enviado, o backend autentica automaticamente como o usuário definido em `DEV_STATIC_USER_EMAIL`.
+- Exemplo (PowerShell):
+```powershell
+$env:DEV_STATIC_TOKEN = "dev-mobile-token-9f3b2c7a1d4e5f6a8b7c9d0e1f2a3b4c"
+$env:DEV_STATIC_USER_EMAIL = "admin@fleetzone.com"
+.\run-dev.bat
+```
+
+5) Scripts de ajuda (Windows)
+- Use `run-dev.bat` (cmd) ou `run-dev.ps1` (PowerShell) para iniciar a aplicação já definindo o token dev automaticamente.
+
+Token dev pronto para testes locais:
+
+```
+DEV_STATIC_TOKEN=dev-mobile-token-9f3b2c7a1d4e5f6a8b7c9d0e1f2a3b4c
+DEV_STATIC_USER_EMAIL=admin@fleetzone.com
+```
+
+⚠️ Importante: não commit nenhum segredo ou token no repositório. Use este mecanismo apenas para desenvolvimento local.
+

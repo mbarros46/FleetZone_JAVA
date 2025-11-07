@@ -9,6 +9,7 @@ C:\Users\migue\Downloads\gs_java\FleetZone_JAVA\src\main\java\com\fiap\fleetzone
 C:\Users\migue\Downloads\gs_java\FleetZone_JAVA\src\main\java\com\fiap\fleetzone\dto\PatioReportDTO.java
 C:\Users\migue\Downloads\gs_java\FleetZone_JAVA\src\main\java\com\fiap\fleetzone\controller\FilialController.java
 C:\Users\migue\Downloads\gs_java\FleetZone_JAVA\src\main\java\com\fiap\fleetzone\model\Filial.java
+C:\Users\migue\Downloads\gs_java\FleetZone_JAVA\src\main\java\com\fiap\fleetzone\security\JwtAuthenticationFilter.java
 C:\Users\migue\Downloads\gs_java\FleetZone_JAVA\src\main\java\com\fiap\fleetzone\config\CorsConfig.java
 C:\Users\migue\Downloads\gs_java\FleetZone_JAVA\src\main\java\com\fiap\fleetzone\controller\RelatorioController.java
 C:\Users\migue\Downloads\gs_java\FleetZone_JAVA\src\main\java\com\fiap\fleetzone\dto\PatioRelatorioDTO.java

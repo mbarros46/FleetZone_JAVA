@@ -5,6 +5,7 @@ import com.fiap.fleetzone.dto.AuthDTOs.AuthLoginRequest;
 import com.fiap.fleetzone.dto.AuthDTOs.AuthRegisterRequest;
 import com.fiap.fleetzone.dto.AuthDTOs.AuthResponse;
 import com.fiap.fleetzone.service.AuthService;
+import com.fiap.fleetzone.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,9 +14,11 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final AuthService auth;
+    private final UserService userService;
 
-    public AuthController(AuthService auth) {
+    public AuthController(AuthService auth, UserService userService) {
         this.auth = auth;
+        this.userService = userService;
     }
 
     @PostMapping("/register")
@@ -37,6 +40,18 @@ public class AuthController {
             return ResponseEntity.ok(resp);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(401).body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<?> me(@RequestHeader(value = "Authorization", required = false) String authHeader) {
+        try {
+            var u = userService.getUsuarioFromAuthHeader(authHeader);
+            return ResponseEntity.ok(u);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(401).body(e.getMessage());
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(404).body(e.getMessage());
         }
     }
 }

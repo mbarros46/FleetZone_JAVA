@@ -1,6 +1,7 @@
 package com.fiap.fleetzone.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,6 +24,12 @@ public class SecurityConfig {
 
     @Autowired
     private CustomUserDetailsService userDetailsService;
+    @Autowired
+    private TokenService tokenService;
+    @Value("${dev.static-token:}")
+    private String devStaticToken;
+    @Value("${dev.static-user-email:}")
+    private String devStaticUserEmail;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -75,6 +82,9 @@ public class SecurityConfig {
 
         // register DaoAuthenticationProvider explicitly to ensure our UserDetailsService and PasswordEncoder are used
         http.authenticationProvider(authenticationProvider());
+
+        // JWT filter to allow mobile/API clients to authenticate using Bearer tokens
+        http.addFilterBefore(new JwtAuthenticationFilter(tokenService, userDetailsService, devStaticToken, devStaticUserEmail), org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

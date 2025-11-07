@@ -17,10 +17,24 @@ public class TokenService {
     private final SecretKey key;
     private final long expirationMillis;
 
-    public TokenService(@Value("${jwt.secret}") String secret,
-                        @Value("${jwt.expiration}") long expirationMillis) {
-        this.key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
-        this.expirationMillis = expirationMillis;
+    public TokenService(@Value("${jwt.secret:}") String secret,
+                        @Value("${jwt.secret-base64:}") String secretBase64,
+                        @Value("${jwt.expiration-ms:0}") long expirationMsFallback,
+                        @Value("${jwt.expiration:0}") long expirationFallback) {
+        // support either plain secret (utf8) or base64 secret (preferred)
+        if (secretBase64 != null && !secretBase64.isBlank()) {
+            byte[] keyBytes = io.jsonwebtoken.io.Decoders.BASE64.decode(secretBase64);
+            this.key = Keys.hmacShaKeyFor(keyBytes);
+        } else if (secret != null && !secret.isBlank()) {
+            this.key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
+        } else {
+            throw new IllegalStateException("JWT secret not configured (jwt.secret or jwt.secret-base64)");
+        }
+
+        // prefer expiration-ms; fall back to legacy jwt.expiration
+        if (expirationMsFallback > 0) this.expirationMillis = expirationMsFallback;
+        else if (expirationFallback > 0) this.expirationMillis = expirationFallback;
+        else this.expirationMillis = 86400000L; // default 24h
     }
 
     public String generate(User user) {
@@ -36,11 +50,27 @@ public class TokenService {
     }
 
     public String getSubject(String token) {
-        return Jwts.parser().verifyWith(key)
-                .build()
-                .parseSignedClaims(token)
-                .getPayload()
-                .getSubject();
+        try {
+            return Jwts.parser().verifyWith(key)
+                    .build()
+                    .parseSignedClaims(token)
+                    .getPayload()
+                    .getSubject();
+        } catch (io.jsonwebtoken.JwtException ex) {
+            throw new IllegalArgumentException("Invalid token", ex);
+        }
+    }
+
+    public String getEmail(String token) {
+        try {
+            return Jwts.parser().verifyWith(key)
+                    .build()
+                    .parseSignedClaims(token)
+                    .getPayload()
+                    .get("email", String.class);
+        } catch (io.jsonwebtoken.JwtException ex) {
+            return null;
+        }
     }
 
     public long getExpirationMillis() { return expirationMillis; }
