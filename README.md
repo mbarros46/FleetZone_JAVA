@@ -273,8 +273,9 @@ Sistema pronto para produção, atendendo todos os requisitos solicitados para a
 
 Links importantes no deploy (preencha após deploy):
 - URL do App: (https://...)
-- URL do Swagger: (https://.../swagger-ui/index.html)
-- URL do Actuator Health: (https://.../actuator/health)
+ - URL do App: (https://...)
+ - URL do Swagger: https://stormsafe-java.onrender.com/swagger-ui/index.html
+ - URL do Actuator Health: (https://.../actuator/health)
 
 ---
 
