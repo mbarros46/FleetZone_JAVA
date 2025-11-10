@@ -1,12 +1,17 @@
 # 🚀 FleetZone - Aplicação Web Completa
 
+## 👨‍💻 Desenvolvido por
+- Miguel Barros Ramos RM556652
+- Pedro Valentim Merise RM556826
+- Thomas Rodrigues RM558042
+
 > **Aplicação Web Full-Stack** desenvolvida com **Spring Boot** para gerenciamento de motos, pátios e filiais da Mottu. Projeto implementado com **100% dos requisitos** solicitados.
 
 ## ✅ PROJETO 100% COMPLETO
 
 ✅ **Aplicação Web Completa com Spring Boot 3.2.3**  
 ✅ **Thymeleaf** - Frontend com templates e fragmentos  
-✅ **Flyway** - Versionamento profissional do banco  
+✅ **Flyway** - Desativado
 ✅ **Spring Security** - Autenticação e autorização  
 ✅ **Funcionalidades Completas** - CRUDs + fluxos + validações  
 
